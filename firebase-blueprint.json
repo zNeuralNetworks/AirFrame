@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "Feedback": {
+      "title": "User Feedback",
+      "description": "Feedback submitted by users of the Airframe application.",
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": ["bug", "feature", "general"],
+          "description": "The type of feedback being submitted."
+        },
+        "rating": {
+          "type": "number",
+          "description": "User rating from 1 to 5."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Detailed feedback text."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the feedback was submitted."
+        },
+        "userAgent": {
+          "type": "string",
+          "description": "Browser information of the user."
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL where the feedback was submitted."
+        },
+        "pageContext": {
+          "type": "string",
+          "description": "The specific application view or context where the feedback was triggered."
+        }
+      },
+      "required": ["category", "rating", "comment", "timestamp"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "A learning module in the curriculum.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Beginner", "Intermediate", "Advanced"] },
+        "durationMinutes": { "type": "number" },
+        "xpReward": { "type": "number" },
+        "simulationId": { "type": "string" },
+        "content": { "type": "string" },
+        "quiz": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "content"]
+    },
+    "GlossaryTerm": {
+      "title": "Glossary Term",
+      "description": "A technical term definition.",
+      "type": "object",
+      "properties": {
+        "term": { "type": "string" },
+        "definition": { "type": "string" },
+        "misconception": { "type": "string" },
+        "aliases": { "type": "array" },
+        "visualId": { "type": "string" },
+        "lessonId": { "type": "string" }
+      },
+      "required": ["term", "definition"]
+    },
+    "Insight": {
+      "title": "Kill Shot Insight",
+      "description": "Daily insights or powerful technical differentiators displayed on the dashboard.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "text": { "type": "string" },
+        "context": { "type": "string", "description": "The thematic category of the insight." },
+        "active": { "type": "boolean", "default": true }
+      },
+      "required": ["title", "text", "context"]
+    },
+    "UserProgress": {
+      "title": "User Progress",
+      "description": "Stored progress for a specific user.",
+      "type": "object",
+      "properties": {
+        "totalXp": { "type": "number" },
+        "streakDays": { "type": "number" },
+        "completedLessonIds": { "type": "array" },
+        "level": { "type": "number" },
+        "quizHistory": { "type": "array" },
+        "achievements": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["totalXp", "streakDays", "completedLessonIds", "level"]
+    }
+  },
+  "firestore": {
+    "feedback": {
+      "schema": "Feedback",
+      "description": "Collection of user feedback submissions."
+    },
+    "lessons": {
+      "schema": "Lesson",
+      "description": "Collection of curriculum lessons."
+    },
+    "glossary": {
+      "schema": "GlossaryTerm",
+      "description": "Collection of glossary terms."
+    },
+    "insights": {
+      "schema": "Insight",
+      "description": "Collection of Kill Shot Insights."
+    },
+    "users/{userId}": {
+      "schema": "UserProgress",
+      "description": "Individual user progress documents."
+    }
+  }
+}

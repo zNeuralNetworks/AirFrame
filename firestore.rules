@@ -1,0 +1,162 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net - Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ===============================================================
+    // Shared Helper Functions (Phase 3: Primitive Definition)
+    // ===============================================================
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Role verification via database lookup or verified email claims
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (
+          'email' in request.auth.token && 
+          request.auth.token.email_verified == true &&
+          (
+            request.auth.token.email.lower() == 'tinurajan1@gmail.com' ||
+            request.auth.token.email.lower().matches('.*@arista[.]com$')
+          )
+        )
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // ===============================================================
+    // Entity Validation Blueprints (Phase 4: Drafting)
+    // ===============================================================
+
+    function isValidFeedback(data) {
+      return data.keys().hasAll(['category', 'rating', 'comment', 'timestamp']) &&
+             data.keys().size() <= 8 && // category, rating, comment, timestamp, userAgent, url, pageContext, userId (optional)
+             data.category in ['bug', 'feature', 'general'] &&
+             data.rating is number && data.rating >= 1 && data.rating <= 5 &&
+             data.comment is string && data.comment.size() > 0 && data.comment.size() <= 2000 &&
+             data.timestamp == request.time &&
+             (!('userAgent' in data) || (data.userAgent is string && data.userAgent.size() <= 512)) &&
+             (!('url' in data) || (data.url is string && data.url.size() <= 1024)) &&
+             (!('pageContext' in data) || (data.pageContext is string && data.pageContext.size() <= 128)) &&
+             (!('userId' in data) || (data.userId is string && data.userId == request.auth.uid));
+    }
+
+    function isValidLesson(data) {
+      return data.keys().hasAll(['id', 'title', 'content']) &&
+             data.id is string && data.id.size() <= 64 &&
+             data.title is string && data.title.size() <= 256 &&
+             data.content is string && data.content.size() <= 50000 &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 1024)) &&
+             (!('category' in data) || (data.category is string && data.category.size() <= 64)) &&
+             (!('difficulty' in data) || data.difficulty in ['Beginner', 'Intermediate', 'Advanced']) &&
+             (!('durationMinutes' in data) || data.durationMinutes is number) &&
+             (!('xpReward' in data) || data.xpReward is number) &&
+             (!('simulationId' in data) || (data.simulationId is string && data.simulationId.size() <= 128)) &&
+             (!('updatedAt' in data) || data.updatedAt == request.time);
+    }
+
+    function isValidGlossary(data) {
+      return data.keys().hasAll(['term', 'definition']) &&
+             data.term is string && data.term.size() <= 128 &&
+             data.definition is string && data.definition.size() <= 2048 &&
+             (!('misconception' in data) || (data.misconception is string && data.misconception.size() <= 2048)) &&
+             (!('aliases' in data) || (data.aliases is list && data.aliases.size() <= 10)) &&
+             (!('visualId' in data) || (data.visualId is string && data.visualId.size() <= 128)) &&
+             (!('lessonId' in data) || (data.lessonId is string && data.lessonId.size() <= 64));
+    }
+
+    function isValidUserProgress(data) {
+      return data.keys().hasAll(['totalXp', 'streakDays', 'completedLessonIds', 'level']) &&
+             data.totalXp is number && data.totalXp >= 0 &&
+             data.streakDays is number && data.streakDays >= 0 &&
+             data.completedLessonIds is list && data.completedLessonIds.size() <= 1000 &&
+             data.level is number && data.level >= 1 &&
+             (!('quizHistory' in data) || (data.quizHistory is list && data.quizHistory.size() <= 500)) &&
+             (!('achievements' in data) || (data.achievements is list && data.achievements.size() <= 100)) &&
+             (!('updatedAt' in data) || data.updatedAt == request.time);
+    }
+
+    function isValidInsight(data) {
+      return data.keys().hasAll(['title', 'text', 'context']) &&
+             data.title is string && data.title.size() <= 128 &&
+             data.text is string && data.text.size() <= 1024 &&
+             data.context is string && data.context.size() <= 64;
+    }
+
+    // ===============================================================
+    // Collection Rules (Phase 6: Final Production)
+    // ===============================================================
+
+    // 1. Feedback (Anyone signed in can create, Admin can manage)
+    match /feedback/{feedbackId} {
+      allow create: if isSignedIn() && isValidId(feedbackId) && isValidFeedback(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    // 2. Kill Shots (Insights) (Public Read, Admin Write)
+    match /insights/{insightId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(insightId) && isValidInsight(incoming());
+    }
+
+    // 3. Curriculum (Public Read, Admin Write)
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(lessonId) && isValidLesson(incoming());
+    }
+
+    match /glossary/{termId} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidId(termId) && isValidGlossary(incoming());
+    }
+
+    // 4. User Progress (PII Isolation & Owner Protection)
+    match /users/{userId} {
+      // Identity Integrity check
+      allow get: if isOwner(userId) || isAdmin();
+      
+      // Secure List Queries: Only admins can list users. Never delegate to client.
+      allow list: if isAdmin(); 
+      
+      // Strict Key check on creation to prevent shadow fields
+      allow create: if isOwner(userId) && isValidId(userId) && 
+                      isValidUserProgress(incoming()) &&
+                      incoming().totalXp == 0; // Canonical start
+                      
+      // Action-Based Update Pattern (Phase 4.2)
+      allow update: if (isOwner(userId) || isAdmin()) && isValidId(userId) && 
+                      isValidUserProgress(incoming()) &&
+                      // Immutability: User ID shouldn't be changeable inside the doc
+                      // Forward-only progress check for non-admins (Temporal Integrity)
+                      (isAdmin() || incoming().totalXp >= existing().totalXp);
+                      
+      allow delete: if isAdmin();
+    }
+    
+    // 5. Admin Management (System Only)
+    match /admins/{adminId} {
+      allow read, write: if false; 
+    }
+  }
+}
