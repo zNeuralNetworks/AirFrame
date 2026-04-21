@@ -3,6 +3,7 @@
 ## 2026-04-21
 
 - Added Cloud Run deployment support with `Dockerfile`, `.dockerignore`, and `cloudbuild.yaml`.
+- Updated Cloud Build to create `airframe-jwt-secret` automatically on first deploy and grant the Cloud Run runtime service account secret access.
 - Made `JWT_SECRET` mandatory in production while preserving the local dev fallback.
 - Added `AIRFRAME_DB_PATH` so the lowdb fallback can write to `/tmp` in Cloud Run.
 - Updated `npm run build` to copy root-level mascot PNG assets into `dist/` for production serving.

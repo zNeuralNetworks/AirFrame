@@ -20,17 +20,31 @@ steps:
             --location="${_REGION}" \
             --description="Airframe container images"
 
-  - id: require-jwt-secret
+  - id: ensure-jwt-secret
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: bash
     args:
       - -ceu
       - |
         gcloud secrets describe "${_JWT_SECRET_NAME}" >/dev/null 2>&1 || {
-          echo "Missing Secret Manager secret: ${_JWT_SECRET_NAME}"
-          echo "Create it before deploying: printf '%s' 'replace-with-strong-secret' | gcloud secrets create ${_JWT_SECRET_NAME} --data-file=-"
-          exit 1
+          python3 -c 'import secrets; print(secrets.token_urlsafe(48), end="")' |
+            gcloud secrets create "${_JWT_SECRET_NAME}" \
+              --replication-policy=automatic \
+              --data-file=-
         }
+
+  - id: allow-cloud-run-secret-access
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        PROJECT_NUMBER="$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')"
+        RUNTIME_SERVICE_ACCOUNT="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
+        gcloud secrets add-iam-policy-binding "${_JWT_SECRET_NAME}" \
+          --member="serviceAccount:${RUNTIME_SERVICE_ACCOUNT}" \
+          --role="roles/secretmanager.secretAccessor" \
+          --quiet >/dev/null
 
   - id: build-image
     name: gcr.io/cloud-builders/docker

@@ -194,7 +194,7 @@ The repo includes:
 
 Runtime expectations:
 
-- Cloud Run must provide `JWT_SECRET` from Secret Manager.
+- Cloud Run gets `JWT_SECRET` from Secret Manager. The Cloud Build pipeline creates `airframe-jwt-secret` with a generated value if the secret does not already exist.
 - `PORT` is set to `8080` in the container and overridden automatically by Cloud Run when needed.
 - `AIRFRAME_DB_PATH` defaults to `/tmp/airframe/database.json` in the container. This lowdb path is ephemeral; use Firestore for durable cloud progress.
 
@@ -203,7 +203,6 @@ One-time GCP setup:
 ```bash
 gcloud config set project YOUR_PROJECT_ID
 gcloud services enable cloudbuild.googleapis.com run.googleapis.com artifactregistry.googleapis.com secretmanager.googleapis.com
-printf '%s' 'replace-with-a-strong-secret' | gcloud secrets create airframe-jwt-secret --data-file=-
 ```
 
 Submit a manual Cloud Build from the repo root:
@@ -214,6 +213,12 @@ gcloud builds submit --config cloudbuild.yaml \
 ```
 
 For GitHub-triggered deploys, connect the GitHub repository to Cloud Build and use `cloudbuild.yaml` as the build config. The pipeline creates the Artifact Registry Docker repository if it does not already exist.
+
+If you want to provide your own JWT secret instead of the generated first-run value:
+
+```bash
+printf '%s' 'replace-with-a-strong-secret' | gcloud secrets versions add airframe-jwt-secret --data-file=-
+```
 
 ## Code Review Graph
 

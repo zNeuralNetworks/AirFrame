@@ -24,7 +24,7 @@ If a dev server is already running on port `3000`, either stop it or use `PORT=3
 
 - GitHub target: `https://github.com/zNeuralNetworks/AirFrame`
 - Cloud Run support files: `Dockerfile`, `.dockerignore`, `cloudbuild.yaml`
-- Production requires Secret Manager secret `airframe-jwt-secret` by default.
+- Production uses Secret Manager secret `airframe-jwt-secret` by default; Cloud Build creates it on first deploy if missing.
 - Cloud Run lowdb fallback path is `/tmp/airframe/database.json`; durable progress should use Firestore.
 
 ## Graph
