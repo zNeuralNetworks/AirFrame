@@ -22,7 +22,7 @@ const Settings: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto p-6 md:p-12 space-y-12 animate-fade-in">
       <div className="flex flex-col md:flex-row items-center gap-8 mb-12 border-b border-border pb-10">
-        <div className="p-5 bg-white rounded-3xl border border-border apple-shadow">
+        <div className="p-5 bg-surface rounded-3xl border border-border apple-shadow">
           <Monitor className="w-10 h-10 text-text-muted stroke-[1.5]" />
         </div>
         <div className="text-center md:text-left">
@@ -33,9 +33,9 @@ const Settings: React.FC = () => {
 
       <div className="space-y-10">
         {/* Account Management */}
-        <div className="bg-white rounded-[32px] border border-border p-10 apple-shadow-lg">
+        <div className="bg-surface rounded-[32px] border border-border p-10 apple-shadow-lg">
           <h3 className="text-xl font-extrabold text-text-primary mb-8 flex items-center gap-4 tracking-tight">
-            <div className="p-2 bg-brand-50 rounded-lg">
+            <div className="p-2 bg-brand-500/10 rounded-lg">
               <User className="w-6 h-6 text-brand-500 stroke-[2.5]" />
             </div>
             Account
@@ -61,7 +61,7 @@ const Settings: React.FC = () => {
             {currentUser && (
               <button 
                 onClick={() => logout()}
-                className="shrink-0 px-8 py-4 rounded-apple font-bold text-lg transition-all flex items-center gap-3 apple-shadow bg-app border border-border text-text-primary hover:bg-white"
+                className="shrink-0 px-8 py-4 rounded-apple font-bold text-lg transition-all flex items-center gap-3 apple-shadow bg-app border border-border text-text-primary hover:bg-surface-highlight"
               >
                 <LogOut className="w-6 h-6 stroke-[2]" />
                 Sign Out
@@ -71,9 +71,9 @@ const Settings: React.FC = () => {
         </div>
 
         {/* Data Management */}
-        <div className="bg-white rounded-[32px] border border-border p-10 apple-shadow-lg">
+        <div className="bg-surface rounded-[32px] border border-border p-10 apple-shadow-lg">
           <h3 className="text-xl font-extrabold text-text-primary mb-8 flex items-center gap-4 tracking-tight">
-            <div className="p-2 bg-brand-50 rounded-lg">
+            <div className="p-2 bg-brand-500/10 rounded-lg">
               <Save className="w-6 h-6 text-brand-500 stroke-[2.5]" />
             </div>
             Data Management
@@ -90,7 +90,7 @@ const Settings: React.FC = () => {
               className={`shrink-0 px-8 py-4 rounded-apple font-bold text-lg transition-all flex items-center gap-3 apple-shadow ${
                 confirmReset 
                   ? 'bg-apple-red text-white hover:opacity-90 scale-105' 
-                  : 'bg-app border border-border text-text-primary hover:bg-white'
+                  : 'bg-app border border-border text-text-primary hover:bg-surface-highlight'
               }`}
             >
               {confirmReset ? <AlertCircle className="w-6 h-6 stroke-[2.5]" /> : <Trash2 className="w-6 h-6 stroke-[2]" />}
@@ -100,9 +100,9 @@ const Settings: React.FC = () => {
         </div>
 
         {/* Demo Configuration */}
-        <div className="bg-white rounded-[32px] border border-border p-10 apple-shadow opacity-80">
+        <div className="bg-surface rounded-[32px] border border-border p-10 apple-shadow opacity-80">
           <h3 className="text-xl font-extrabold text-text-primary mb-8 flex items-center gap-4 tracking-tight">
-            <div className="p-2 bg-indigo-50 rounded-lg">
+            <div className="p-2 bg-apple-indigo/10 rounded-lg">
               <Shield className="w-6 h-6 text-apple-indigo stroke-[2.5]" />
             </div>
             Environment

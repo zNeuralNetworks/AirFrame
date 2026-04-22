@@ -69,14 +69,14 @@ const Sidebar: React.FC<SidebarProps> = ({
         {currentUser ? (
           <div className="flex flex-col gap-2 p-4 bg-surface rounded-apple border border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-brand-500/10 text-brand-600 rounded-xl flex items-center justify-center">
                 <User className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <p className="text-xs font-black text-brand-600 uppercase tracking-widest mb-0.5">Learner</p>
                   {user.isApproved && (
-                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-100 text-brand-600 rounded text-[9px] font-black uppercase tracking-tighter border border-brand-200">
+                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[9px] font-black uppercase tracking-tighter border border-brand-500/20">
                       <ShieldCheck className="w-2.5 h-2.5" />
                       Arista
                     </div>
@@ -87,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <button
               onClick={() => actions.logout()}
-              className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all text-xs font-bold uppercase"
+              className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-apple-red hover:bg-apple-red/10 rounded-lg transition-all text-xs font-bold uppercase"
             >
               <LogOut className="w-3.5 h-3.5" /> Sign Out
             </button>
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         ) : (
           <button
             onClick={onAuthClick}
-            className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-apple apple-shadow hover:scale-[1.02] active:scale-[0.98] transition-all font-bold text-sm"
+            className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-brand-500 text-white rounded-apple apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all font-bold text-sm"
           >
             <User className="w-5 h-5" /> Sign In / Up
           </button>

@@ -71,9 +71,9 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
         const Icon = ICONS[item.icon] || BookText;
         const isExpanded = expandedItem === item.id;
         return (
-          <div key={item.id} className={`bg-white rounded-apple-lg border border-border apple-shadow transition-all duration-500 overflow-hidden ${isExpanded ? 'md:col-span-2 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
+          <div key={item.id} className={`bg-surface rounded-apple-lg border border-border apple-shadow transition-all duration-500 overflow-hidden ${isExpanded ? 'md:col-span-2 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
             <button onClick={() => setExpandedItem(isExpanded ? null : item.id)} className="w-full p-10 text-left flex items-center gap-8 group">
-              <div className="p-5 bg-app text-brand-500 rounded-apple group-hover:bg-brand-50 transition-colors shadow-inner">
+              <div className="p-5 bg-app text-brand-500 rounded-apple group-hover:bg-brand-500/10 transition-colors shadow-inner">
                 <Icon className="w-8 h-8 stroke-[2]" />
               </div>
               <div className="flex-1">
@@ -110,7 +110,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-12 space-y-24 pb-40">
       <header className="text-center space-y-8">
-        <div className="inline-flex items-center justify-center w-24 h-24 bg-white text-brand-500 rounded-[32px] apple-shadow-lg border border-border">
+        <div className="inline-flex items-center justify-center w-24 h-24 bg-surface text-brand-500 rounded-[32px] apple-shadow-lg border border-border">
            <BookCopy className="w-12 h-12 stroke-[2.5]" />
         </div>
         <div className="space-y-3">
@@ -124,10 +124,10 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       {/* Visual Glossary */}
       <section className="space-y-10">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-white apple-shadow rounded-2xl text-brand-500 border border-border"><BrainCircuit className="w-8 h-8 stroke-[2]" /></div>
+          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><BrainCircuit className="w-8 h-8 stroke-[2]" /></div>
           <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Visual Glossary</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 h-[800px] bg-white rounded-apple-lg border border-border apple-shadow-lg p-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 h-[800px] bg-surface rounded-apple-lg border border-border apple-shadow-lg p-8">
             {/* Left Pane: Search & List */}
             <div className="md:col-span-1 flex flex-col h-full overflow-hidden border-r border-border pr-8">
                 <div className="relative mb-8">
@@ -137,7 +137,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                         placeholder="Search terms..."
                         value={glossarySearch}
                         onChange={e => setGlossarySearch(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4.5 bg-app border border-border rounded-apple text-lg font-medium focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all"
+                        className="w-full pl-14 pr-6 py-4.5 bg-app border border-border rounded-apple text-lg text-text-primary placeholder:text-text-muted font-medium focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all"
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
@@ -163,7 +163,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                         </div>
                         
                         {SelectedSim && (
-                            <div className="bg-white rounded-apple-lg p-8 border border-border apple-shadow-lg">
+                            <div className="bg-surface rounded-apple-lg p-8 border border-border apple-shadow-lg">
                                 <div className="aspect-video h-72 mx-auto">
                                     <div className="w-full h-full scale-[0.95] origin-center">
                                         <SimulationLoader 
@@ -177,7 +177,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                             </div>
                         )}
 
-                        <div className="p-10 bg-white border border-border apple-shadow rounded-apple-lg">
+                        <div className="p-10 bg-surface border border-border apple-shadow rounded-apple-lg">
                             <div className="flex items-center gap-3 text-apple-orange font-bold text-xs uppercase tracking-widest mb-4">
                                 <Info className="w-5 h-5 stroke-[2.5]" /> Common Misconception
                             </div>
@@ -206,22 +206,22 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       {/* Comparison Engine */}
       <section className="space-y-10">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-white apple-shadow rounded-2xl text-brand-500 border border-border"><GitCompare className="w-8 h-8 stroke-[2]" /></div>
+          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><GitCompare className="w-8 h-8 stroke-[2]" /></div>
           <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Comparison Engine</h2>
         </div>
-        <div className="bg-white rounded-apple-lg border border-border apple-shadow-lg overflow-hidden">
+        <div className="bg-surface rounded-apple-lg border border-border apple-shadow-lg overflow-hidden">
           <div className="p-12 flex flex-col md:flex-row items-center justify-center gap-10 border-b border-border bg-app/30">
             <div className="relative w-full md:w-80">
-              <select value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-white border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />
             </div>
-            <div className="p-4 bg-white rounded-full apple-shadow border border-border">
+            <div className="p-4 bg-surface rounded-full apple-shadow border border-border">
               <GitCompare className="w-8 h-8 text-brand-500 stroke-[2.5]" />
             </div>
             <div className="relative w-full md:w-80">
-              <select value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-white border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />
@@ -247,7 +247,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       {/* Vertical Playbooks */}
       <section className="space-y-10">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-white apple-shadow rounded-2xl text-brand-500 border border-border"><Briefcase className="w-8 h-8 stroke-[2]" /></div>
+          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Briefcase className="w-8 h-8 stroke-[2]" /></div>
           <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Vertical Playbooks</h2>
         </div>
         {renderExpandableList(playbooks)}
@@ -256,7 +256,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       {/* Curated Cheatsheets */}
       <section className="space-y-10">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-white apple-shadow rounded-2xl text-brand-500 border border-border"><Check className="w-8 h-8 stroke-[2.5]" /></div>
+          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Check className="w-8 h-8 stroke-[2.5]" /></div>
           <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Curated Cheatsheets</h2>
         </div>
         {renderExpandableList(regularCheatsheets)}

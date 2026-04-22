@@ -65,10 +65,10 @@ const DemoScorecard: React.FC = () => {
   };
 
   const getRatingColor = (percentage: number) => {
-    if (percentage >= 90) return 'text-green-600';
+    if (percentage >= 90) return 'text-apple-green';
     if (percentage >= 75) return 'text-brand-600';
-    if (percentage >= 60) return 'text-amber-500';
-    return 'text-red-500';
+    if (percentage >= 60) return 'text-apple-orange';
+    return 'text-apple-red';
   };
 
   const getGrade = (percentage: number) => {
@@ -85,27 +85,27 @@ const DemoScorecard: React.FC = () => {
     <div className="max-w-5xl mx-auto p-6 md:p-10 pb-40">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-border-DEFAULT pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-border pb-8">
         <div>
            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+              <div className="p-2 bg-apple-indigo/10 text-apple-indigo rounded-lg">
                  <ClipboardCheck className="w-6 h-6" />
               </div>
-              <h1 className="text-3xl font-bold text-slate-900">Demo Scorecard</h1>
+              <h1 className="text-3xl font-bold text-text-primary">Demo Scorecard</h1>
            </div>
-           <p className="text-slate-500 text-lg">Self-evaluation tool for sales engineering excellence.</p>
+           <p className="text-text-muted text-lg">Self-evaluation tool for sales engineering excellence.</p>
         </div>
 
         <div className="flex gap-4 items-center">
            <button 
              onClick={() => setScores({})}
-             className="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-slate-700 font-medium transition-colors"
+             className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-text-primary font-medium transition-colors"
            >
               <RefreshCw className="w-4 h-4" /> Reset
            </button>
            <button 
              onClick={() => window.print()}
-             className="flex items-center gap-2 px-5 py-2 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors shadow-sm"
+             className="flex items-center gap-2 px-5 py-2 bg-brand-500 text-white rounded-xl font-bold hover:bg-brand-600 transition-colors shadow-sm"
            >
               <Printer className="w-4 h-4" /> Print Report
            </button>
@@ -117,16 +117,16 @@ const DemoScorecard: React.FC = () => {
          {/* Main Form */}
          <div className="lg:col-span-2 space-y-8">
             {CRITERIA.map((cat, idx) => (
-               <div key={idx} className="bg-white rounded-2xl border border-border-DEFAULT p-6 shadow-sm">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-                     <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-xs">{idx + 1}</span>
+               <div key={idx} className="bg-surface rounded-2xl border border-border p-6 shadow-sm">
+                  <h3 className="text-lg font-bold text-text-primary mb-4 pb-2 border-b border-border flex items-center gap-2">
+                     <span className="w-6 h-6 rounded-full bg-app text-text-muted flex items-center justify-center text-xs">{idx + 1}</span>
                      {cat.category}
                   </h3>
                   <div className="space-y-6">
                      {cat.items.map((item) => (
                         <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                            <div className="flex-1">
-                              <p className="text-slate-700 font-medium text-sm">{item.text}</p>
+                              <p className="text-text-secondary font-medium text-sm">{item.text}</p>
                               {item.weight > 1 && (
                                  <span className="text-[10px] text-brand-600 font-bold uppercase tracking-wider bg-brand-50 px-1.5 py-0.5 rounded mt-1 inline-block">
                                     {item.weight}x Impact
@@ -138,9 +138,9 @@ const DemoScorecard: React.FC = () => {
                                  const isSelected = scores[item.id] === rating;
                                  let btnClass = "px-3 py-2 rounded-lg border text-xs font-bold transition-all w-20 flex justify-center";
                                  
-                                 if (rating === 0) btnClass += isSelected ? " bg-red-50 border-red-500 text-red-600" : " border-slate-200 text-slate-400 hover:border-red-200 hover:text-red-400";
-                                 if (rating === 1) btnClass += isSelected ? " bg-amber-50 border-amber-500 text-amber-600" : " border-slate-200 text-slate-400 hover:border-amber-200 hover:text-amber-400";
-                                 if (rating === 2) btnClass += isSelected ? " bg-green-50 border-green-500 text-green-600 shadow-sm" : " border-slate-200 text-slate-400 hover:border-green-200 hover:text-green-400";
+                                 if (rating === 0) btnClass += isSelected ? " bg-apple-red/10 border-apple-red text-apple-red" : " border-border text-text-muted hover:border-apple-red/40 hover:text-apple-red";
+                                 if (rating === 1) btnClass += isSelected ? " bg-apple-orange/10 border-apple-orange text-apple-orange" : " border-border text-text-muted hover:border-apple-orange/40 hover:text-apple-orange";
+                                 if (rating === 2) btnClass += isSelected ? " bg-apple-green/10 border-apple-green text-apple-green shadow-sm" : " border-border text-text-muted hover:border-apple-green/40 hover:text-apple-green";
 
                                  const label = rating === 0 ? "Missed" : rating === 1 ? "Okay" : "Nailed It";
 
@@ -174,8 +174,8 @@ const DemoScorecard: React.FC = () => {
                   <div className={`text-6xl font-extrabold mb-2 ${getRatingColor(percentage)}`}>
                      {percentage}%
                   </div>
-                  <div className="text-2xl font-bold text-slate-300">{getGrade(percentage)}</div>
-                  <div className="text-sm text-slate-500 mt-1">{totalScore} / {maxScore} Points</div>
+                  <div className="text-2xl font-bold text-white/80">{getGrade(percentage)}</div>
+                  <div className="text-sm text-white/40 mt-1">{totalScore} / {maxScore} Points</div>
                </div>
 
                <div className="space-y-4">
@@ -183,28 +183,28 @@ const DemoScorecard: React.FC = () => {
                      <h4 className="font-bold text-brand-300 mb-1 flex items-center gap-2">
                         <Star className="w-4 h-4" /> Power Tip
                      </h4>
-                     <p className="text-xs text-slate-300 leading-relaxed">
+                     <p className="text-xs text-white/70 leading-relaxed">
                         Don't obsess over perfection. Authenticity connects better than a scripted robot. If you make a mistake, own it and show how to fix it.
                      </p>
                   </div>
 
                   {percentage < 70 && (
-                     <div className="p-4 bg-red-500/10 rounded-xl border border-red-500/30">
-                        <h4 className="font-bold text-red-300 mb-1 flex items-center gap-2">
+                     <div className="p-4 bg-apple-red/10 rounded-xl border border-apple-red/30">
+                        <h4 className="font-bold text-apple-red mb-1 flex items-center gap-2">
                            <AlertCircle className="w-4 h-4" /> Focus Area
                         </h4>
-                        <p className="text-xs text-red-200 leading-relaxed">
+                        <p className="text-xs text-white/70 leading-relaxed">
                            You are missing key opportunities. Review the "The Golden Path" track in the Demo Roadmap to restructure your flow.
                         </p>
                      </div>
                   )}
 
                   {percentage >= 90 && (
-                     <div className="p-4 bg-green-500/10 rounded-xl border border-green-500/30">
-                        <h4 className="font-bold text-green-300 mb-1 flex items-center gap-2">
+                     <div className="p-4 bg-apple-green/10 rounded-xl border border-apple-green/30">
+                        <h4 className="font-bold text-apple-green mb-1 flex items-center gap-2">
                            <CheckCircle2 className="w-4 h-4" /> Ready for Launch
                         </h4>
-                        <p className="text-xs text-green-200 leading-relaxed">
+                        <p className="text-xs text-white/70 leading-relaxed">
                            Excellent work. You are telling a compelling story, not just showing features. Go close the deal.
                         </p>
                      </div>

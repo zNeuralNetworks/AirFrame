@@ -144,7 +144,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
           <div className="flex flex-col items-end">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-extrabold text-brand-500 uppercase tracking-[0.2em]">Level {user.level}</span>
-              <div className="w-20 h-1.5 bg-brand-50 rounded-full overflow-hidden border border-brand-100">
+              <div className="w-20 h-1.5 bg-brand-500/10 rounded-full overflow-hidden border border-brand-500/20">
                 <div 
                   className="h-full bg-brand-500 transition-all duration-1000" 
                   style={{ width: `${(user.totalXp % 500) / 5}%` }}
@@ -152,11 +152,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 px-6 py-3 bg-white text-apple-orange rounded-full font-bold apple-shadow border border-border">
+              <div className="flex items-center gap-3 px-6 py-3 bg-surface text-apple-orange rounded-full font-bold apple-shadow border border-border">
                 <Flame className="w-6 h-6 fill-apple-orange text-apple-orange stroke-[2.5]" />
                 <span className="text-base tracking-tight">{user.streakDays} Day Streak</span>
               </div>
-              <div className="flex items-center gap-3 px-6 py-3 bg-white text-brand-500 rounded-full font-bold apple-shadow border border-border">
+              <div className="flex items-center gap-3 px-6 py-3 bg-surface text-brand-500 rounded-full font-bold apple-shadow border border-border">
                 <Zap className="w-6 h-6 fill-brand-500 text-brand-500 stroke-[2.5]" />
                 <span className="text-base tracking-tight">{user.totalXp} XP</span>
               </div>
@@ -169,13 +169,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         
         {/* Continue Learning Card */}
-        <div className="lg:col-span-2 bg-white rounded-[40px] p-12 apple-shadow-lg border border-border flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-brand-50 rounded-full blur-[120px] -mr-32 -mt-32 pointer-events-none opacity-40 group-hover:opacity-60 transition-opacity duration-1000"></div>
+        <div className="lg:col-span-2 bg-surface rounded-[40px] p-12 apple-shadow-lg border border-border flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] -mr-32 -mt-32 pointer-events-none opacity-40 group-hover:opacity-60 transition-opacity duration-1000"></div>
           
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
               <span className="text-xs font-extrabold tracking-[0.2em] text-brand-500 uppercase">Current Mission</span>
-              <div className="h-px flex-1 bg-brand-100"></div>
+              <div className="h-px flex-1 bg-brand-500/20"></div>
             </div>
             <h3 className="text-5xl font-extrabold text-text-primary mb-6 tracking-tight font-serif leading-tight">
               {nextLesson.title}
@@ -207,7 +207,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         </div>
 
         {/* Skill Radar */}
-        <div className="bg-white rounded-[40px] p-10 apple-shadow-lg border border-border flex flex-col items-center">
+        <div className="bg-surface rounded-[40px] p-10 apple-shadow-lg border border-border flex flex-col items-center">
             <h4 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6 opacity-60 w-full">Mastery Goal</h4>
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -236,7 +236,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
                     fillOpacity={0.25}
                   />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', borderColor: 'var(--color-border)', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+                    contentStyle={{ backgroundColor: 'var(--color-surface-highlight)', color: 'var(--color-text-primary)', backdropFilter: 'blur(10px)', borderColor: 'var(--color-border)', borderRadius: '20px', border: '1px solid var(--color-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.18)' }}
+                    labelStyle={{ color: 'var(--color-text-primary)', fontWeight: 800 }}
                     itemStyle={{ color: 'var(--color-brand-500)', fontWeight: 800, fontSize: '14px' }}
                   />
                 </RadarChart>
@@ -265,7 +266,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
             </div>
             <div className="space-y-4 mb-8">
               <h4 className="text-3xl font-bold text-white tracking-tight">{featuredInsight.title}</h4>
-              <p className="text-slate-400 text-lg leading-relaxed font-serif italic">
+              <p className="text-white/70 text-lg leading-relaxed font-serif italic">
                 "{featuredInsight.text}"
               </p>
             </div>
@@ -279,7 +280,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         </div>
 
         {/* Glossary Highlight (Databank Content) */}
-        <div className="bg-white rounded-[40px] p-10 apple-shadow border border-border flex flex-col justify-between">
+        <div className="bg-surface rounded-[40px] p-10 apple-shadow border border-border flex flex-col justify-between">
             <div className="space-y-6">
                 <div className="flex items-center gap-3">
                    <div className="p-2 bg-brand-50 rounded-lg text-brand-500">
@@ -293,7 +294,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
                         {featuredGlossary.definition}
                     </p>
                 </div>
-                <div className="p-5 bg-orange-50 border border-orange-100 rounded-2xl">
+                <div className="p-5 bg-apple-orange/10 border border-apple-orange/20 rounded-2xl">
                     <div className="flex items-center gap-2 text-apple-orange text-[10px] font-black uppercase tracking-widest mb-1.5">
                         <Info className="w-3.5 h-3.5" /> Misconception
                     </div>
@@ -310,10 +311,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         </div>
 
         {/* Protocol Snapshot (Refresher/Databank Content) */}
-        <div className="bg-white rounded-[40px] p-10 apple-shadow border border-border flex flex-col justify-between">
+        <div className="bg-surface rounded-[40px] p-10 apple-shadow border border-border flex flex-col justify-between">
             <div className="space-y-8">
                 <div className="flex items-center gap-3">
-                   <div className="p-2 bg-indigo-50 rounded-lg text-apple-indigo">
+                   <div className="p-2 bg-apple-indigo/10 rounded-lg text-apple-indigo">
                       <ArrowRightLeft className="w-5 h-5" />
                    </div>
                    <h4 className="text-xs font-bold text-text-muted uppercase tracking-widest opacity-60">Protocol Snapshot</h4>
@@ -345,7 +346,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         <section className="space-y-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-white apple-shadow rounded-xl border border-border">
+              <div className="p-3 bg-surface apple-shadow rounded-xl border border-border">
                 <Clock className="w-6 h-6 text-brand-500 stroke-[2.5]" />
               </div>
               <h3 className="text-3xl font-extrabold text-text-primary tracking-tight font-serif">Recent Activity</h3>
@@ -357,11 +358,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
                 const lesson = lessons.find(l => l.id === attempt.lessonId);
                 const scorePercent = Math.round((attempt.score / attempt.maxScore) * 100);
                 return (
-                  <div key={idx} className="bg-white p-6 rounded-apple border border-border apple-shadow flex flex-col justify-between group hover:scale-[1.02] transition-all">
+                  <div key={idx} className="bg-surface p-6 rounded-apple border border-border apple-shadow flex flex-col justify-between group hover:scale-[1.02] transition-all">
                     <div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest opacity-60">Quiz Result</span>
-                        <span className={`text-xs font-extrabold px-2 py-1 rounded-md ${scorePercent >= 80 ? 'bg-green-50 text-green-600' : 'bg-orange-50 text-apple-orange'}`}>
+                        <span className={`text-xs font-extrabold px-2 py-1 rounded-md ${scorePercent >= 80 ? 'bg-apple-green/10 text-apple-green' : 'bg-apple-orange/10 text-apple-orange'}`}>
                           {scorePercent}%
                         </span>
                       </div>
@@ -375,7 +376,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
               })}
             </div>
           ) : (
-            <div className="bg-white/50 border-2 border-dashed border-border rounded-[40px] p-12 text-center text-text-tertiary">
+            <div className="bg-surface-highlight border-2 border-dashed border-border rounded-[40px] p-12 text-center text-text-tertiary">
               <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-20" />
               <p className="font-medium text-lg">No sessions recorded yet.</p>
               <button 
@@ -391,19 +392,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         {/* Achievements */}
         <section className="space-y-8">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white apple-shadow rounded-xl border border-border">
+            <div className="p-3 bg-surface apple-shadow rounded-xl border border-border">
               <Trophy className="w-6 h-6 text-apple-orange stroke-[2.5]" />
             </div>
             <h3 className="text-3xl font-extrabold text-text-primary tracking-tight font-serif">Achievements</h3>
           </div>
-          <div className="bg-white rounded-[40px] border border-border apple-shadow p-10 h-full min-h-[300px]">
+          <div className="bg-surface rounded-[40px] border border-border apple-shadow p-10 h-full min-h-[300px]">
             {user.achievements.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {user.achievements.slice(0, 4).map((achievement) => {
                   const IconComponent = Trophy;
                   return (
-                    <div key={achievement.id} className="flex items-center gap-4 p-4 rounded-3xl bg-app border border-border group hover:bg-white hover:apple-shadow transition-all duration-300">
-                      <div className="p-3 bg-white rounded-2xl apple-shadow text-apple-orange">
+                    <div key={achievement.id} className="flex items-center gap-4 p-4 rounded-3xl bg-app border border-border group hover:bg-surface-highlight hover:apple-shadow transition-all duration-300">
+                      <div className="p-3 bg-surface rounded-2xl apple-shadow text-apple-orange">
                         <IconComponent className="w-6 h-6" />
                       </div>
                       <div>
