@@ -21,8 +21,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/server.ts ./server.ts
-COPY --from=build /app/server ./server
+COPY --from=build /app/dist-server ./dist-server
 
 USER node
 

@@ -11,7 +11,7 @@
 - Use `npm run lint` for type checking. Do not assume a test runner exists until one is added to `package.json`.
 - Cloud Run deployment uses `Dockerfile` and `cloudbuild.yaml`. Production requires `JWT_SECRET`; the Cloud Build config creates a Secret Manager secret named `airframe-jwt-secret` on first deploy unless `_JWT_SECRET_NAME` is overridden.
 - The lowdb fallback path is controlled by `AIRFRAME_DB_PATH`; Cloud Run uses `/tmp/airframe/database.json`, which is ephemeral. Firestore remains the durable cloud persistence path.
-- `npm run build` runs Vite and then `scripts/copy-public-assets.cjs` so root-level `corgimascot-*.png` files are served in production.
+- `npm run build` runs Vite, copies root-level `corgimascot-*.png` files into `dist/`, and bundles `server.ts` into `dist-server/server.js` for production.
 
 ## Current Repo Facts
 

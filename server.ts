@@ -1,5 +1,4 @@
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
 import { createServer as createHttpServer } from 'http';
 import path from 'path';
 import cors from 'cors';
@@ -163,6 +162,7 @@ async function startServer() {
   // --- Vite / Static Handling ---
 
   if (!isProduction) {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: {
         middlewareMode: true,

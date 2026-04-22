@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && node scripts/copy-public-assets.cjs",
-    "start": "tsx server.ts",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build && node scripts/copy-public-assets.cjs",
+    "build:server": "esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/server.js",
+    "start": "node dist-server/server.js",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
     "screenshot:constellation": "node scripts/constellation-screenshot.cjs"
@@ -27,7 +29,6 @@
     "react-markdown": "^10.1.0",
     "recharts": "^3.6.0",
     "tailwindcss": "^4.2.4",
-    "tsx": "^4.21.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
@@ -40,7 +41,9 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "^0.27.2",
     "playwright": "^1.59.1",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^8.0.9"
   }

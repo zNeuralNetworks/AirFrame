@@ -191,6 +191,7 @@ The repo includes:
 - `Dockerfile`: multi-stage Node 22 build/runtime image
 - `.dockerignore`: excludes local dependencies, generated output, graph data, and secrets
 - `cloudbuild.yaml`: builds the image, pushes it to Artifact Registry, and deploys Cloud Run
+- Production start runs compiled JavaScript from `dist-server/server.js`; local development still uses `tsx server.ts`.
 
 Runtime expectations:
 
