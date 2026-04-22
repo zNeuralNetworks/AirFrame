@@ -142,9 +142,9 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
             disabled={isLessonLocked}
             className={`
                 w-full flex items-center gap-6 p-6 rounded-apple border text-left group transition-all
-                ${isLessonLocked 
-                    ? 'bg-app border-border opacity-50 cursor-not-allowed' 
-                    : 'bg-white border-border apple-shadow hover:scale-[1.01] cursor-pointer'}
+                ${isLessonLocked
+                    ? 'bg-app border-border opacity-50 cursor-not-allowed'
+                    : 'bg-surface border-border apple-shadow hover:scale-[1.01] cursor-pointer'}
             `}
             >
             <div className={`
@@ -217,10 +217,10 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
 
              {/* Reference Toggle (Only in List View) */}
              {viewMode === 'list' && (
-                <button 
+                <button
                    onClick={toggleReferenceMode}
                    className={`flex items-center gap-1 p-1 rounded-full border transition-all apple-shadow ${
-                      referenceMode ? 'bg-white border-border' : 'bg-app border-border'
+                      referenceMode ? 'bg-surface border-border' : 'bg-app border-border'
                    }`}
                 >
                    <div className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${!referenceMode ? 'bg-brand-500 text-white apple-shadow' : 'text-text-muted hover:text-text-primary'}`}>
