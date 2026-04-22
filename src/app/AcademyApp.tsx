@@ -9,11 +9,36 @@ import Settings from '../features/dashboard/Settings';
 import QuickRefresher from '../features/demo/QuickRefresher';
 import Databank from '../features/dashboard/Databank';
 import CMSDashboard from '../features/cms/CMSDashboard';
+import AuthModal from '../components/auth/AuthModal';
 import { useUserStore, useUserActions } from '../state/userStore';
 import { Lesson } from '../types';
-import { LayoutDashboard, BookOpen, Compass, Settings as SettingsIcon, ClipboardCheck, Zap, BookCopy, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Compass, Settings as SettingsIcon, ClipboardCheck, Zap, BookCopy, ShieldCheck, Lock } from 'lucide-react';
 import { GLOSSARY } from '../content/glossary';
 import { CHEATSHEETS } from '../content/cheatsheets';
+
+const AuthWall: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="flex flex-col items-center justify-center h-full p-12 text-center gap-8 select-none">
+      <div className="p-6 bg-brand-500/10 rounded-[32px] border border-brand-500/20">
+        <Lock className="w-16 h-16 text-brand-500" />
+      </div>
+      <div className="space-y-3 max-w-sm">
+        <h2 className="text-3xl font-extrabold text-text-primary tracking-tight">Sign in to fly</h2>
+        <p className="text-text-muted text-lg font-medium leading-relaxed">
+          Create a free account to access all labs, track your progress, and earn your certification.
+        </p>
+      </div>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="px-10 py-5 bg-brand-500 text-white rounded-apple font-bold text-lg hover:bg-brand-600 transition-all hover:scale-105 active:scale-95 apple-shadow-lg"
+      >
+        Sign In / Create Account
+      </button>
+      <AuthModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </div>
+  );
+};
 
 /**
  * AcademyApp is the main container for the Airframe learning experience.
@@ -92,7 +117,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
   const navItems: NavItem[] = useMemo(() => {
     const items: NavItem[] = [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'learn', label: 'Airframe Labs', icon: BookOpen },
+      { id: 'learn', label: 'Airframe Academy', icon: BookOpen },
       { id: 'databank', label: 'Databank', icon: BookCopy },
       { id: 'refresher', label: 'Refresher', icon: Zap },
       { id: 'demo-copilot', label: 'Demo Co-Pilot', icon: Compass },
@@ -177,6 +202,10 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
           Loading Academy...
         </div>
       );
+    }
+
+    if (!currentUser) {
+      return <AuthWall />;
     }
 
     switch (view) {

@@ -30,6 +30,7 @@ interface UserState {
     completeLesson: (lessonId: string, xpReward: number) => Promise<void>;
     setSimCompleted: (lessonId: string) => Promise<void>;
     recordQuizAttempt: (lessonId: string, score: number, maxScore: number) => Promise<void>;
+    setUsername: (username: string) => Promise<void>;
     saveReflection: (lessonId: string, text: string) => void;
     getReflection: (lessonId: string) => string;
     awardAchievement: (achievementId: string) => Promise<void>;
@@ -368,6 +369,11 @@ export const useUserStore = create<UserState>()(
           if (updatedUser.quizHistory.length === 1) {
             await awardAchievement('first-quiz');
           }
+        },
+        setUsername: async (username) => {
+          const updatedUser = { ...get().user, username };
+          set({ user: updatedUser });
+          await get().actions.saveToFirebase(updatedUser);
         },
         saveReflection: (lessonId, text) => {
           try {

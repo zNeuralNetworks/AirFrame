@@ -17,6 +17,8 @@ interface SidebarProps {
   onSearchResultClick?: (id: string) => void;
 }
 
+const ADMIN_EMAIL = 'tinurajan1@gmail.com';
+
 const Sidebar: React.FC<SidebarProps> = ({
   title,
   navItems,
@@ -29,6 +31,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSearchResultClick
 }) => {
   const { currentUser, actions, user } = useUserStore();
+  const email = currentUser?.email?.toLowerCase() || '';
+  const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');
 
   return (
     <aside className="hidden md:flex flex-col w-72 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
@@ -74,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-xs font-black text-brand-600 uppercase tracking-widest mb-0.5">Learner</p>
+                  <p className="text-xs font-black text-brand-600 uppercase tracking-widest mb-0.5">{user.username || 'Learner'}</p>
                   {user.isApproved && (
                     <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[9px] font-black uppercase tracking-tighter border border-brand-500/20">
                       <ShieldCheck className="w-2.5 h-2.5" />
@@ -113,8 +117,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         )}
 
-        {onExitApp && (
-          <button 
+        {onExitApp && isAdmin && (
+          <button
             onClick={onExitApp}
             className="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 text-text-muted hover:text-text-primary hover:bg-surface/50 rounded-apple transition-all text-xs font-bold uppercase tracking-wider"
           >
