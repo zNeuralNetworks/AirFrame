@@ -201,14 +201,14 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
              <div className="flex bg-app p-1 rounded-2xl border border-border apple-shadow">
                 <button
                    onClick={() => setViewMode('list')}
-                   className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white apple-shadow text-brand-500' : 'text-text-muted hover:text-text-primary'}`}
+                   className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-surface apple-shadow text-brand-500' : 'text-text-muted hover:text-text-primary'}`}
                    title="List View"
                 >
                    <List className="w-6 h-6 stroke-[2]" />
                 </button>
                 <button
                    onClick={() => setViewMode('galaxy')}
-                   className={`p-3 rounded-xl transition-all ${viewMode === 'galaxy' ? 'bg-white apple-shadow text-brand-500' : 'text-text-muted hover:text-text-primary'}`}
+                   className={`p-3 rounded-xl transition-all ${viewMode === 'galaxy' ? 'bg-surface apple-shadow text-brand-500' : 'text-text-muted hover:text-text-primary'}`}
                    title="Galaxy View"
                 >
                    <Network className="w-6 h-6 stroke-[2]" />
@@ -251,12 +251,12 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                           className={`
                              w-full flex items-center gap-8 p-8 rounded-apple-lg border transition-all duration-500 text-left
                              ${isLocked 
-                                ? 'bg-app border-border opacity-60 cursor-not-allowed' 
-                                : 'bg-white border-border apple-shadow hover:scale-[1.01]'}
+                                ? 'bg-app border-border opacity-60 cursor-not-allowed'
+                                : 'bg-surface border-border apple-shadow hover:scale-[1.01]'}
                           `}
                        >
                           <div className={`
-                             w-20 h-20 rounded-apple flex items-center justify-center text-white shrink-0 apple-shadow z-20 transition-all border-4 border-white
+                             w-20 h-20 rounded-apple flex items-center justify-center text-white shrink-0 apple-shadow z-20 transition-all border-4 border-surface
                              ${isLocked ? 'bg-slate-200' : (isComplete ? 'bg-brand-500' : mod.color)}
                           `}>
                              {isLocked ? <Lock className="w-10 h-10 text-slate-400 stroke-[1.5]" /> : (referenceMode ? <BookOpen className="w-10 h-10 stroke-[2]" /> : (isComplete ? <CheckCircle2 className="w-10 h-10 stroke-[2.5]" /> : <mod.icon className="w-10 h-10 stroke-[2]" />))}

@@ -41,7 +41,7 @@ const HeroPage: React.FC<HeroPageProps> = ({ onEnter }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7] selection:bg-brand-500/30 selection:text-brand-900 font-sans text-text-primary overflow-x-hidden">
+    <div className="force-light min-h-screen bg-[#F2F2F7] selection:bg-brand-500/30 selection:text-brand-900 font-sans text-text-primary overflow-x-hidden">
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-brand-500/5 rounded-full blur-[120px] animate-pulse-glow" />
