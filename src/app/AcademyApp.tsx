@@ -49,24 +49,15 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
       
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
-          useUserStore.setState({ 
+          useUserStore.setState({
             isAuthReady: true,
-            currentUser: {
-              id: user.uid,
-              uid: user.uid,
-              email: user.email || ''
-            },
-            token: 'firebase_auth'
+            currentUser: { id: user.uid, uid: user.uid, email: user.email || '' }
           });
           loadLessons();
           loadGlossary();
           syncProgress();
         } else {
-          useUserStore.setState({ 
-            isAuthReady: true,
-            // Only clear if not using legacy token (optional, but safer for transitions)
-            ...(useUserStore.getState().token === 'firebase_auth' ? { currentUser: null, token: null } : {})
-          });
+          useUserStore.setState({ isAuthReady: true, currentUser: null });
           loadLessons();
           loadGlossary();
         }
