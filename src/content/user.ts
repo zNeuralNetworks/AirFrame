@@ -1,10 +1,10 @@
 import { UserProgress } from '../types';
 
 export const MOCK_USER: UserProgress = {
-  totalXp: 1250,
-  streakDays: 4,
+  totalXp: 0,
+  streakDays: 0,
   completedLessonIds: [],
-  level: 3,
+  level: 1,
   quizHistory: [],
   achievements: []
 };

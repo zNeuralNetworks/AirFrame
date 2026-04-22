@@ -44,10 +44,26 @@ const KILL_SHOT_INSIGHTS = [
   }
 ];
 
+const RANKS = [
+  { minLevel: 1, label: 'Spectrum Cadet' },
+  { minLevel: 2, label: 'Signal Scout' },
+  { minLevel: 3, label: 'Frequency Technician' },
+  { minLevel: 4, label: 'Protocol Engineer' },
+  { minLevel: 5, label: 'RF Architect' },
+  { minLevel: 6, label: 'Wireless Master' },
+];
+
+const getRank = (level: number) => {
+  const rank = [...RANKS].reverse().find(r => level >= r.minLevel);
+  return rank?.label ?? 'Spectrum Cadet';
+};
+
 const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
   const user = useUserStore(state => state.user);
+  const currentUser = useUserStore(state => state.currentUser);
   const lessons = useUserStore(state => state.lessons);
   const glossary = useUserStore(state => state.glossary);
+  const displayName = user.username || currentUser?.email?.split('@')[0] || 'Cadet';
   const [dynamicInsights, setDynamicInsights] = useState<Insight[]>([]);
 
   useEffect(() => {
@@ -102,28 +118,31 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
   // Calculate skill matrix based on lesson categories
   const skillData = useMemo(() => {
     const categoryMap: Record<string, string> = {
-      'Module 1: The Physical Layer': 'Physics',
-      'Module 2: Airtime & Protocols': 'Protocols',
-      'Module 3: Spatial Streams & MIMO': 'MIMO',
-      'Module 4: The Connection Lifecycle': 'Lifecycle',
-      'Module 5: Security & Authentication': 'Security',
-      'Module 6: Troubleshooting & Tools': 'Tools'
+      'Module 1: The Physics of Invisible Light': 'Physics',
+      'Module 2: Airtime Economics': 'Airtime',
+      'Module 3: Spatial Design & Capacity': 'Spatial',
+      'Module 4: The Connection State Machine': 'Connection',
+      'Module 5: Roaming & Mobility': 'Roaming',
+      'Module 6: Efficiency Standards': 'Efficiency',
+      'Module 7: Infrastructure Architecture': 'Infra',
+      'Module 8: Defense & Security': 'Security',
+      'Module 9: Mean Time to Innocence': 'MTTI',
     };
 
-    const categories = Array.from(new Set(lessons.map(l => l.category)));
-    return categories.map(cat => {
+    const coreModules = Object.keys(categoryMap);
+    return coreModules.slice(0, 6).map(cat => {
       const catLessons = lessons.filter(l => l.category === cat);
       const completed = catLessons.filter(l => l.completed).length;
-      const score = Math.max(5, Math.round((completed / catLessons.length) * 100));
-      const label = categoryMap[cat] || (cat.split(': ')[1] || cat).substring(0, 10);
-
+      const score = catLessons.length > 0
+        ? Math.max(5, Math.round((completed / catLessons.length) * 100))
+        : 5;
       return {
-        subject: label,
+        subject: categoryMap[cat],
         A: score,
         B: 100,
         fullMark: 100
       };
-    }).slice(0, 6);
+    });
   }, [lessons]);
 
   return (
@@ -136,7 +155,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
             <Mascot size="md" expression="happy" />
           </div>
           <div>
-            <h2 className="text-4xl font-extrabold text-text-primary tracking-tight font-serif">Welcome back, Cadet.</h2>
+            <h2 className="text-4xl font-extrabold text-text-primary tracking-tight font-serif">Welcome back, {displayName}.</h2>
             <p className="text-text-muted mt-2 text-xl font-medium font-serif">Ready to surf the electromagnetic spectrum?</p>
           </div>
         </div>
@@ -209,13 +228,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
         {/* Skill Radar */}
         <div className="bg-surface rounded-[40px] p-10 apple-shadow-lg border border-border flex flex-col items-center">
             <h4 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6 opacity-60 w-full">Mastery Goal</h4>
-            <div className="h-64 w-full">
+            <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={skillData}>
+                <RadarChart cx="50%" cy="50%" outerRadius="58%" data={skillData} margin={{ top: 24, right: 36, bottom: 24, left: 36 }}>
                   <PolarGrid stroke="var(--color-border)" strokeWidth={1} />
-                  <PolarAngleAxis 
-                    dataKey="subject" 
-                    tick={{ fill: 'var(--color-text-muted)', fontSize: 10, fontWeight: 800, letterSpacing: '0.02em' }} 
+                  <PolarAngleAxis
+                    dataKey="subject"
+                    tick={{ fill: 'var(--color-text-muted)', fontSize: 11, fontWeight: 800, letterSpacing: '0.02em' }}
                   />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                   <Radar
@@ -245,7 +264,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
             </div>
             <div className="w-full pt-4 border-t border-border mt-4 flex items-center justify-between text-xs font-bold">
                <span className="text-text-muted uppercase tracking-widest">Rank</span>
-               <span className="text-brand-500 font-extrabold uppercase">Spectrum Cadet</span>
+               <span className="text-brand-500 font-extrabold uppercase">{getRank(user.level)}</span>
             </div>
         </div>
 

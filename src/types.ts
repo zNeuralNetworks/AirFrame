@@ -119,4 +119,5 @@ export interface UserProgress {
   quizHistory: QuizAttempt[];
   achievements: Achievement[];
   isApproved?: boolean;
+  username?: string;
 }
