@@ -40,7 +40,7 @@ Treat these as wider blast-radius changes:
 - Static TypeScript content in `src/content` is the baseline source of truth; Firestore can override lessons and glossary terms at runtime.
 - Preserve local-first progress merging in `userStore`: persisted lesson completion/lock state merges onto `INITIAL_LESSONS`.
 - Quiz access is gated on lab completion for lessons with simulations.
-- Demo mode is limited by `DEMO_LESSON_IDS` in `AcademyApp`.
+- The standalone Quick Demo app mode has been removed; do not reintroduce `demoMode` routing or `DEMO_LESSON_IDS`.
 - Admin CMS access is currently gated by `tinurajan1@gmail.com` or `@arista.com`.
 - Add simulations by updating `SimulationType`, `SimulationRegistry.ts`, `LAB_SPECS`, and lesson `simulationId`.
 - Use accurate Arista/networking terminology and realistic enterprise wireless/campus examples in content and UI copy.

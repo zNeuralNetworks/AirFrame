@@ -81,15 +81,12 @@ This captures the Airframe Labs Knowledge Constellation to `output/playwright/ai
 
 ## Product Modes
 
-The top-level app has five modes:
+The top-level app has four modes:
 
 - Landing page
 - Launcher
 - Airframe Academy
-- Quick Demo
 - Design System
-
-Quick Demo is a curated path for short customer-facing or internal demo sessions. The current demo lesson IDs are controlled in `src/app/AcademyApp.tsx`.
 
 Search is available through the app shell and indexes lessons, glossary terms, and cheatsheets.
 

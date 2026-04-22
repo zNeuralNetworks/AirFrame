@@ -15,7 +15,7 @@ Airframe is an interactive wireless-systems learning app for Arista-oriented SE/
 
 ## Main Paths
 
-- `src/app/App.tsx`: mode switch for landing, launcher, academy, demo, design.
+- `src/app/App.tsx`: mode switch for landing, launcher, academy, and design.
 - `src/app/AcademyApp.tsx`: academy shell, screen routing, search index, nav items, admin gate.
 - `src/shared/ui/Layout.tsx`: global UI shell.
 - `src/shared/ui/layout/*`: sidebar, mobile bars, search, theme, feedback modal.

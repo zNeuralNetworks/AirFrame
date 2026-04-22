@@ -15,8 +15,8 @@
 
 ## Current Repo Facts
 
-- App shell has five modes: landing, launcher, academy, design system, and demo.
-- Demo mode filters lessons to `1.1`, `1.3`, `5.1`, and `1.assessment`.
+- App shell has four modes: landing, launcher, academy, and design system.
+- The standalone Quick Demo app mode was removed; demo tools remain available inside the academy/design-system areas where routed.
 - Admin CMS gate is hardcoded to `tinurajan1@gmail.com` and `@arista.com`.
 - Firebase config is loaded from `firebase-applet-config.json`.
 - `npm run dev` runs Vite directly on port 3000.

@@ -27,7 +27,7 @@ interface UserState {
     logout: () => void;
     syncProgress: () => Promise<void>;
     saveToFirebase: (progress: UserProgress) => Promise<void>;
-    completeLesson: (lessonId: string, xpReward: number, demoMode: boolean) => Promise<void>;
+    completeLesson: (lessonId: string, xpReward: number) => Promise<void>;
     setSimCompleted: (lessonId: string) => Promise<void>;
     recordQuizAttempt: (lessonId: string, score: number, maxScore: number) => Promise<void>;
     saveReflection: (lessonId: string, text: string) => void;
@@ -288,18 +288,16 @@ export const useUserStore = create<UserState>()(
             console.error("Failed to load glossary", error);
           }
         },
-        completeLesson: async (lessonId, xpReward, demoMode) => {
+        completeLesson: async (lessonId, xpReward) => {
           const state = get();
           const updatedLessons = state.lessons.map(l => {
             if (l.id === lessonId) return { ...l, completed: true };
             return l;
           });
 
-          if (!demoMode) {
-            const completedIndex = updatedLessons.findIndex(l => l.id === lessonId);
-            if (completedIndex !== -1 && completedIndex < updatedLessons.length - 1) {
-              updatedLessons[completedIndex + 1].locked = false;
-            }
+          const completedIndex = updatedLessons.findIndex(l => l.id === lessonId);
+          if (completedIndex !== -1 && completedIndex < updatedLessons.length - 1) {
+            updatedLessons[completedIndex + 1].locked = false;
           }
 
           let updatedUser = state.user;

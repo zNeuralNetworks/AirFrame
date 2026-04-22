@@ -21,15 +21,13 @@ import { CHEATSHEETS } from '../content/cheatsheets';
 
 interface AcademyAppProps {
   onExit: () => void;
-  demoMode?: boolean;
 }
 
-const DEMO_LESSON_IDS = ['1.1', '1.3', '5.1', '1.assessment'];
 const ADMIN_EMAIL = "tinurajan1@gmail.com";
 
-const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => {
+const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
   // --- State ---
-  const [view, setView] = useState(demoMode ? 'learn' : 'dashboard');
+  const [view, setView] = useState('dashboard');
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [initialDatabankTerm, setInitialDatabankTerm] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -87,19 +85,14 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
 
   // --- Derived State ---
   const mainLessons = useMemo(() => {
-    if (demoMode) {
-      return allLessons
-        .filter(l => DEMO_LESSON_IDS.includes(l.id))
-        .map(l => ({ ...l, locked: false }));
-    }
     return allLessons;
-  }, [allLessons, demoMode]);
+  }, [allLessons]);
 
   // --- Navigation Config ---
   const navItems: NavItem[] = useMemo(() => {
     const items: NavItem[] = [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'learn', label: demoMode ? 'Airframe Demo' : 'Airframe Labs', icon: BookOpen },
+      { id: 'learn', label: 'Airframe Labs', icon: BookOpen },
       { id: 'databank', label: 'Databank', icon: BookCopy },
       { id: 'refresher', label: 'Refresher', icon: Zap },
       { id: 'demo-copilot', label: 'Demo Co-Pilot', icon: Compass },
@@ -112,7 +105,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
     }
 
     return items;
-  }, [demoMode, isAdmin]);
+  }, [isAdmin]);
 
   // --- Search Indexing ---
   const searchData: SearchableItem[] = useMemo(() => {
@@ -164,7 +157,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
   const handleLessonComplete = (lessonId: string, score: number) => {
     const currentLesson = mainLessons.find(l => l.id === lessonId);
     if (currentLesson) {
-      completeLesson(lessonId, currentLesson.xpReward, demoMode);
+      completeLesson(lessonId, currentLesson.xpReward);
     }
     setView('learn');
     setSelectedLesson(null);
@@ -233,7 +226,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
       currentView={activeNavId} 
       onChangeView={(v) => { setView(v); setSelectedLesson(null); }}
       navItems={navItems}
-      title={demoMode ? "Airframe Demo" : "Airframe"}
+      title="Airframe"
       onExitApp={onExit}
       searchData={searchData}
       onSearchResultClick={handleSearchNavigation}
