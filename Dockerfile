@@ -24,6 +24,8 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/server.ts ./server.ts
 COPY --from=build /app/server ./server
 
+RUN mkdir -p /tmp/airframe && chown -R node:node /tmp/airframe
+
 USER node
 
 EXPOSE 8080
