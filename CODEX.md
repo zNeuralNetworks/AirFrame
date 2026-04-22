@@ -23,10 +23,9 @@ If a dev server is already running on port `3000`, either stop it or use `PORT=3
 ## Deployment
 
 - GitHub target: `https://github.com/zNeuralNetworks/AirFrame`
-- Cloud Run support files: `Dockerfile`, `.dockerignore`, `cloudbuild.yaml`
-- Production uses Secret Manager secret `airframe-jwt-secret` by default; Cloud Build creates it on first deploy if missing.
-- Production start runs `node dist-server/server.js`; `tsx server.ts` is dev-only.
-- Cloud Run lowdb fallback path is `/tmp/airframe/database.json`; durable progress should use Firestore.
+- Cloud Run support files: `Dockerfile`, `nginx.conf`, `.dockerignore`, `cloudbuild.yaml`
+- Production serves the static Vite build from Nginx on port 8080.
+- Firebase Auth and Firestore are the only backend.
 
 ## Graph
 
@@ -48,7 +47,7 @@ code-review-graph update --repo /Users/theorajan/local\ builds/airframe
 - Lesson flow: start with `src/features/curriculum/LessonView.tsx`.
 - Simulation work: start with `src/features/simulations/SimulationRegistry.ts`, target simulation component, `src/content/labs.ts`, and `src/types.ts`.
 - Content work: start with `src/content/lessons.ts`, `src/content/modules.ts`, `src/content/glossary.ts`, plus `src/services/contentService.ts` if Firestore behavior matters.
-- Progress/auth: start with `src/state/userStore.ts`, `src/lib/firebase.ts`, `src/services/apiService.ts`, `server.ts`.
+- Progress/auth: start with `src/state/userStore.ts` and `src/lib/firebase.ts`.
 - Design-system docs: start with `src/app/DesignSystem.tsx` and `src/features/design-system/useDesignSystemRoutes.tsx`.
 
 ## Verification Defaults

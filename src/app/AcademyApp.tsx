@@ -55,8 +55,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
               id: user.uid,
               uid: user.uid,
               email: user.email || ''
-            },
-            token: 'firebase_auth'
+            }
           });
           loadLessons();
           loadGlossary();
@@ -64,8 +63,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit, demoMode = false }) => 
         } else {
           useUserStore.setState({ 
             isAuthReady: true,
-            // Only clear if not using legacy token (optional, but safer for transitions)
-            ...(useUserStore.getState().token === 'firebase_auth' ? { currentUser: null, token: null } : {})
+            currentUser: null
           });
           loadLessons();
           loadGlossary();

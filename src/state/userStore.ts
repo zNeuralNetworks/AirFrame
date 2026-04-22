@@ -4,10 +4,9 @@ import { Lesson, UserProgress, QuizAttempt, GlossaryTerm } from '../types';
 import { INITIAL_LESSONS } from '../content/lessons';
 import { GLOSSARY } from '../content/glossary';
 import { MOCK_USER } from '../content/user';
-import { authService, progressService } from '../services/apiService';
 
 interface UserInfo {
-  id: string | number;
+  id: string;
   email: string;
   uid?: string;
 }
@@ -19,7 +18,6 @@ interface UserState {
   isLoading: boolean;
   isAuthReady: boolean;
   currentUser: UserInfo | null;
-  token: string | null;
   actions: {
     loadLessons: () => Promise<void>;
     loadGlossary: () => Promise<void>;
@@ -48,12 +46,54 @@ const isAuthorized = (email: string | null | undefined) => {
   return lowerEmail.endsWith('@arista.com') || lowerEmail === ADMIN_EMAIL;
 };
 
+const emptyProgress = (): UserProgress => ({
+  ...MOCK_USER,
+  quizHistory: [],
+  achievements: [],
+  completedLessonIds: []
+});
+
 const initialProgress = () => {
   return { 
     lessons: INITIAL_LESSONS, 
     glossary: GLOSSARY,
-    user: { ...MOCK_USER, quizHistory: [], achievements: [], completedLessonIds: [] }, 
+    user: emptyProgress(), 
     isLoading: false 
+  };
+};
+
+const mergeProgress = (local: UserProgress, remote?: Partial<UserProgress> | null): UserProgress => {
+  if (!remote) return local;
+
+  const completedLessonIds = Array.from(new Set([
+    ...(remote.completedLessonIds || []),
+    ...(local.completedLessonIds || [])
+  ]));
+
+  const achievementMap = new Map<string, UserProgress['achievements'][number]>();
+  [...(remote.achievements || []), ...(local.achievements || [])].forEach((achievement) => {
+    achievementMap.set(achievement.id, achievement);
+  });
+
+  const quizHistory = [...(remote.quizHistory || []), ...(local.quizHistory || [])];
+  const seenAttempts = new Set<string>();
+  const uniqueQuizHistory = quizHistory.filter((attempt) => {
+    const key = `${attempt.lessonId}:${attempt.score}:${attempt.maxScore}:${attempt.date}`;
+    if (seenAttempts.has(key)) return false;
+    seenAttempts.add(key);
+    return true;
+  });
+
+  return {
+    ...local,
+    ...remote,
+    totalXp: Math.max(local.totalXp || 0, remote.totalXp || 0),
+    streakDays: Math.max(local.streakDays || 0, remote.streakDays || 0),
+    level: Math.max(local.level || 1, remote.level || 1),
+    completedLessonIds,
+    quizHistory: uniqueQuizHistory,
+    achievements: Array.from(achievementMap.values()),
+    isApproved: local.isApproved || remote.isApproved
   };
 };
 
@@ -63,16 +103,21 @@ export const useUserStore = create<UserState>()(
       ...initialProgress(),
       isAuthReady: false,
       currentUser: null,
-      token: null,
       actions: {
         login: async (email, password) => {
           set({ isLoading: true });
           try {
-            const data = await authService.login(email, password);
+            const { auth } = await import('../lib/firebase');
+            const { signInWithEmailAndPassword } = await import('firebase/auth');
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            const firebaseUser = result.user;
             const approved = isAuthorized(email);
             set((state) => ({ 
-              token: data.token, 
-              currentUser: data.user, 
+              currentUser: {
+                id: firebaseUser.uid,
+                uid: firebaseUser.uid,
+                email: firebaseUser.email || email
+              }, 
               isLoading: false,
               user: {
                 ...state.user,
@@ -96,7 +141,6 @@ export const useUserStore = create<UserState>()(
             const approved = isAuthorized(firebaseUser.email);
             
             set((state) => ({ 
-              token: 'firebase_auth', // Placeholder to indicate authenticated state
               currentUser: {
                 id: firebaseUser.uid,
                 uid: firebaseUser.uid,
@@ -120,11 +164,17 @@ export const useUserStore = create<UserState>()(
         register: async (email, password) => {
           set({ isLoading: true });
           try {
-            const data = await authService.register(email, password);
+            const { auth } = await import('../lib/firebase');
+            const { createUserWithEmailAndPassword } = await import('firebase/auth');
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            const firebaseUser = result.user;
             const approved = isAuthorized(email);
             set((state) => ({ 
-              token: data.token, 
-              currentUser: data.user, 
+              currentUser: {
+                id: firebaseUser.uid,
+                uid: firebaseUser.uid,
+                email: firebaseUser.email || email
+              }, 
               isLoading: false,
               user: {
                 ...state.user,
@@ -145,63 +195,59 @@ export const useUserStore = create<UserState>()(
           
           localStorage.removeItem('airframe_progress_v3');
           set({ 
-            token: null, 
             currentUser: null, 
-            user: { ...MOCK_USER, quizHistory: [], achievements: [], completedLessonIds: [] } 
+            user: emptyProgress()
           });
         },
         syncProgress: async () => {
-          const { currentUser, token } = get();
+          const { currentUser } = get();
           if (!currentUser) return;
 
           set({ isLoading: true });
 
-          // 1. Try Firebase Sync FIRST
           if (currentUser.uid) {
             try {
               const { db } = await import('../lib/firebase');
               const { doc, getDoc, setDoc, serverTimestamp } = await import('firebase/firestore');
               const userRef = doc(db, 'users', currentUser.uid);
               const userDoc = await getDoc(userRef);
+              const localProgress = get().user;
+              const approved = isAuthorized(currentUser.email);
 
               if (userDoc.exists()) {
-                const data = userDoc.data() as UserProgress;
-                set({ user: { ...data, isApproved: isAuthorized(currentUser.email) } });
+                const merged = mergeProgress(localProgress, userDoc.data() as UserProgress);
+                const approvedMerged = { ...merged, isApproved: approved || merged.isApproved };
+                set({ user: approvedMerged });
+                await setDoc(userRef, {
+                  ...approvedMerged,
+                  updatedAt: serverTimestamp()
+                }, { merge: true });
               } else {
-                // Initialize new user in Firebase
-                const newProgress = {
-                  ...get().user,
+                const emptyRemoteProgress = {
+                  ...emptyProgress(),
                   totalXp: 0,
                   streakDays: 0,
                   level: 1,
                   completedLessonIds: [],
                   quizHistory: [],
                   achievements: [],
-                  updatedAt: serverTimestamp()
                 };
-                await setDoc(userRef, newProgress);
-                set({ user: { ...newProgress as UserProgress, isApproved: isAuthorized(currentUser.email) } });
+                await setDoc(userRef, {
+                  ...emptyRemoteProgress,
+                  updatedAt: serverTimestamp()
+                });
+                const merged = mergeProgress(localProgress, emptyRemoteProgress);
+                const approvedMerged = { ...merged, isApproved: approved || merged.isApproved };
+                set({ user: approvedMerged });
+                await setDoc(userRef, {
+                  ...approvedMerged,
+                  updatedAt: serverTimestamp()
+                }, { merge: true });
               }
               set({ isLoading: false });
               return;
             } catch (e) {
-              console.error("Firebase sync failed, falling back to local/api", e);
-            }
-          }
-          
-          // 2. Fallback to API sync
-          if (token && token !== 'firebase_auth') {
-            try {
-              const progress = await progressService.getProgress(token);
-              if (progress && typeof progress === 'object') {
-                set({ user: progress });
-              }
-            } catch (error: any) {
-              console.error("API Sync failed", error);
-              const errorMsg = error?.message || "";
-              if (errorMsg.includes('401') || errorMsg.includes('403')) {
-                get().actions.logout();
-              }
+              console.error("Firebase sync failed", e);
             }
           }
           set({ isLoading: false });
@@ -286,11 +332,6 @@ export const useUserStore = create<UserState>()(
 
             // Sync with Firebase
             await get().actions.saveToFirebase(updatedUser);
-
-            // Sync with API backends (Legacy)
-            if (state.token && state.token !== 'firebase_auth') {
-              await progressService.saveProgress(state.token, updatedUser);
-            }
           }
           
           set({ lessons: updatedLessons, user: updatedUser });
@@ -328,10 +369,6 @@ export const useUserStore = create<UserState>()(
           }
           if (updatedUser.quizHistory.length === 1) {
             await awardAchievement('first-quiz');
-          }
-
-          if (state.token && state.token !== 'firebase_auth') {
-            await progressService.saveProgress(state.token, updatedUser);
           }
         },
         saveReflection: (lessonId, text) => {
@@ -378,10 +415,6 @@ export const useUserStore = create<UserState>()(
 
           // Sync with Firebase
           await get().actions.saveToFirebase(updatedUser);
-
-          if (state.token && state.token !== 'firebase_auth') {
-            await progressService.saveProgress(state.token, updatedUser);
-          }
         },
         resetProgress: () => {
           localStorage.removeItem(REFLECTIONS_KEY);
@@ -393,7 +426,6 @@ export const useUserStore = create<UserState>()(
       name: 'airframe_progress_v3',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        token: state.token,
         currentUser: state.currentUser,
         lessons: state.lessons.map(l => ({
           id: l.id,
@@ -404,7 +436,7 @@ export const useUserStore = create<UserState>()(
         user: state.user
       }),
       merge: (persistedState, currentState) => {
-        const persisted = persistedState as Partial<Pick<UserState, 'lessons' | 'user' | 'token' | 'currentUser'>>;
+        const persisted = persistedState as Partial<Pick<UserState, 'lessons' | 'user' | 'currentUser'>>;
         const mergedLessons = INITIAL_LESSONS.map(initLesson => {
           const savedLesson = persisted.lessons?.find((l: Partial<Lesson>) => l.id === initLesson.id);
           if (savedLesson) {
@@ -428,7 +460,6 @@ export const useUserStore = create<UserState>()(
         
         return {
           ...currentState,
-          token: persisted.token || null,
           currentUser: persisted.currentUser || null,
           lessons: mergedLessons,
           user: mergedUser,

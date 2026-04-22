@@ -6,7 +6,7 @@ Start here for Codex work in this repo. Keep token use low: use the graph first,
 ## Fast Context
 
 - Product: Airframe, an interactive wireless-systems learning app for Arista-oriented SE/customer education.
-- Stack: React 19, TypeScript, Vite 8, Tailwind CSS 4.2, Zustand 5, Firebase Auth/Firestore, Express/lowdb fallback API.
+- Stack: React 19, TypeScript, Vite 8, Tailwind CSS 4.2, Zustand 5, Firebase Auth/Firestore.
 - Main app flow: `src/app/App.tsx` selects mode; `src/app/AcademyApp.tsx` routes screens; `src/features/curriculum/LessonView.tsx` runs briefing -> lab -> quiz; simulations resolve through `src/features/simulations/SimulationRegistry.ts`.
 - Low-token docs: read `CONTEXT.md` for orientation, `MEMORY.md` for durable decisions, `CLAUDE.md` for the fuller repo brief and caveats.
 
@@ -56,7 +56,7 @@ code-review-graph status
 code-review-graph build --repo /Users/theorajan/local\ builds/airframe
 ```
 
-`npm run dev` starts `tsx server.ts` and serves on `http://localhost:3000`. Prefer it over raw `vite` because the Express server embeds Vite middleware.
+`npm run dev` starts Vite on `http://localhost:3000`.
 
 ## MCP Tools: code-review-graph
 
@@ -99,7 +99,7 @@ Fall back to Grep/Glob/Read **only** when the graph doesn't cover what you need.
 ### Current Graph Notes
 
 - Full graph build completed on 2026-04-21.
-- Current CLI status after rebuild: 135 files, 485 indexed nodes, 3010 status edges; build output reported 581 total nodes, 3025 edges, 44 flows, 12 communities.
+- Current CLI status after Firebase-only refactor: 132 files parsed, 471 indexed nodes; build output reported 566 total nodes, 2908 edges, 39 flows, 11 communities.
 - `get_architecture_overview` works through MCP.
 - Some graph hotspot tools may fail with a path-resolution error; fall back to overview/search and targeted file reads.
-- This folder is not a git repository, so Claude hook commands guarded by `git rev-parse` may skip graph auto-update. Run graph update/build manually when needed.
+- This folder is now a git repository, but `.code-review-graph/` is local-only and gitignored. Run graph update/build manually when needed.

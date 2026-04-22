@@ -28,8 +28,6 @@
     "noEmit": true
   },
   "include": [
-    "server.ts",
-    "server/**/*.ts",
     "services/**/*.ts",
     "src/**/*.ts",
     "src/**/*.tsx",

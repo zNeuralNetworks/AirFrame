@@ -8,12 +8,10 @@
 node_modules
 dist
 dist-ssr
-dist-server
 output
 logs
 *.log
 .env
 .env.*
 !.env.example
-database.json
 .DS_Store

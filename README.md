@@ -13,8 +13,7 @@ Primary audience: Arista-oriented SE/customer education across Wi-Fi, RF fundame
 - Vite 8
 - Tailwind CSS 4.2
 - Zustand 5 with persisted local progress
-- Firebase Auth and Firestore
-- Express 5, JWT, and lowdb for the local/legacy API path
+- Firebase Auth and Firestore as the only backend
 - `lucide-react`, `motion`, `react-markdown`, and `recharts`
 
 ## Quick Start
@@ -38,7 +37,7 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-`npm run dev` runs `tsx server.ts`. The Express server listens on port `3000` and mounts Vite middleware in development. Prefer this path over running raw `vite`.
+`npm run dev` runs Vite directly on port `3000`.
 
 If port `3000` is already in use, stop the existing dev server or run another instance on a different port:
 
@@ -60,7 +59,7 @@ The `lint` script currently runs `tsc --noEmit`.
 npm run build
 ```
 
-This creates the production `dist/` bundle and copies root-level mascot PNG assets into `dist/` so the Express production server can serve them.
+This creates the production `dist/` bundle and copies root-level mascot PNG assets into `dist/`.
 
 ### Preview
 
@@ -106,12 +105,10 @@ airframe/
 │   ├── features/             # Curriculum, simulations, dashboard, CMS, demo, design system
 │   ├── hooks/                # Content lookup hooks
 │   ├── lib/                  # Firebase integration and Firestore error handling
-│   ├── services/             # API, content, Gemini, telemetry services
+│   ├── services/             # Content, Gemini, telemetry services
 │   ├── shared/ui/            # Layout, navigation, mascot, UI utilities
 │   ├── state/                # Zustand user/progress store
 │   └── types.ts              # Core domain types
-├── server.ts                 # Express API + Vite middleware
-├── server/db.ts              # lowdb local persistence
 ├── docs/                     # Design, architecture, setup, and planning docs
 ├── AGENTS.md                 # Codex operating guide
 ├── CODEX.md                  # Short Codex handoff
@@ -132,7 +129,7 @@ airframe/
 3. Quiz or assessment
 4. Completion, XP, telemetry, and progress sync
 
-`src/state/userStore.ts` is the main state boundary for lessons, glossary, auth state, user progress, achievements, reflections, Firebase sync, and fallback API sync.
+`src/state/userStore.ts` is the main state boundary for lessons, glossary, auth state, user progress, achievements, reflections, and Firebase sync.
 
 ## Content Model
 
@@ -166,8 +163,8 @@ The app is local-first:
 - Zustand persist stores progress in local storage under `airframe_progress_v3`.
 - Persisted lesson state is merged onto the current static `INITIAL_LESSONS` so new content can appear without wiping user progress.
 - Reflections use local storage under `airframe_reflections_v1`.
-- Firebase Auth/Firestore provide Google sign-in and cloud progress sync.
-- Express/JWT/lowdb remain available as a local/legacy fallback API path.
+- Firebase Auth provides Google and email/password sign-in.
+- Firestore stores user progress, feedback, lesson overrides, and glossary overrides.
 
 Admin CMS access is currently gated by `tinurajan1@gmail.com` or email addresses ending in `@arista.com`.
 
@@ -191,35 +188,28 @@ The repo includes:
 - `Dockerfile`: multi-stage Node 22 build/runtime image
 - `.dockerignore`: excludes local dependencies, generated output, graph data, and secrets
 - `cloudbuild.yaml`: builds the image, pushes it to Artifact Registry, and deploys Cloud Run
-- Production start runs compiled JavaScript from `dist-server/server.js`; local development still uses `tsx server.ts`.
+- Production is served by an unprivileged Nginx container that listens on port `8080`.
 
 Runtime expectations:
 
-- Cloud Run gets `JWT_SECRET` from Secret Manager. The Cloud Build pipeline creates `airframe-jwt-secret` with a generated value if the secret does not already exist.
-- `PORT` is set to `8080` in the container and overridden automatically by Cloud Run when needed.
-- `AIRFRAME_DB_PATH` defaults to `/tmp/airframe/database.json` in the container. This lowdb path is ephemeral; use Firestore for durable cloud progress.
+- Cloud Run serves the static Vite build.
+- Firebase Auth and Firestore are the only backend dependencies.
 
 One-time GCP setup:
 
 ```bash
 gcloud config set project YOUR_PROJECT_ID
-gcloud services enable cloudbuild.googleapis.com run.googleapis.com artifactregistry.googleapis.com secretmanager.googleapis.com
+gcloud services enable cloudbuild.googleapis.com run.googleapis.com artifactregistry.googleapis.com
 ```
 
 Submit a manual Cloud Build from the repo root:
 
 ```bash
 gcloud builds submit --config cloudbuild.yaml \
-  --substitutions=_REGION=us-central1,_SERVICE=airframe,_AR_REPO=airframe,_JWT_SECRET_NAME=airframe-jwt-secret
+  --substitutions=_REGION=us-central1,_SERVICE=airframe,_AR_REPO=airframe
 ```
 
 For GitHub-triggered deploys, connect the GitHub repository to Cloud Build and use `cloudbuild.yaml` as the build config. The pipeline creates the Artifact Registry Docker repository if it does not already exist.
-
-If you want to provide your own JWT secret instead of the generated first-run value:
-
-```bash
-printf '%s' 'replace-with-a-strong-secret' | gcloud secrets versions add airframe-jwt-secret --data-file=-
-```
 
 ## Code Review Graph
 

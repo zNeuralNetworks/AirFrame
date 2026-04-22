@@ -10,8 +10,7 @@ Airframe is an interactive wireless-systems learning app for Arista-oriented SE/
 
 - React 19, TypeScript, Vite 8, Tailwind CSS 4.2.
 - Zustand 5 with persisted local progress.
-- Firebase Auth/Firestore for Google login, user progress, feedback, lesson/glossary overrides.
-- Express/lowdb/JWT local API exists as a legacy or fallback backend and also hosts Vite middleware in dev.
+- Firebase Auth/Firestore for Google and email/password login, user progress, feedback, lesson/glossary overrides.
 - Icons: `lucide-react`; charts: `recharts`; animation: `motion`.
 
 ## Main Paths
@@ -29,7 +28,6 @@ Airframe is an interactive wireless-systems learning app for Arista-oriented SE/
 - `src/content/*`: lessons, modules, labs, glossary, cheatsheets, comparisons, demo/copilot data.
 - `src/services/contentService.ts`: Firestore content override merge.
 - `src/lib/firebase.ts`: Firebase config/init and structured Firestore error handling.
-- `server.ts`, `server/db.ts`: local API and lowdb store.
 
 ## Core Flow
 

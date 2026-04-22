@@ -10,8 +10,6 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-dist-server
-database.json
 output/playwright/
 *.local
 .env
