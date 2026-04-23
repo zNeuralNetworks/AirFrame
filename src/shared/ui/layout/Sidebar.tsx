@@ -35,41 +35,45 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');
 
   return (
-    <aside className="hidden md:flex flex-col w-72 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
-      <div className="p-8 flex items-center gap-4">
-        <div className="bg-brand-500 p-2.5 rounded-2xl transition-all shadow-lg shadow-brand-500/20">
+    <aside className="hidden md:flex flex-col w-64 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
+      <div className="px-5 py-4 flex items-center gap-4">
+        <div className="bg-brand-500 p-2 rounded-xl transition-all shadow-lg shadow-brand-500/20">
           <Radio className="text-white w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-bold text-text-primary tracking-tight">
+        <h1 className="text-xl font-bold text-text-primary tracking-tight">
           {title}
         </h1>
       </div>
 
-      <div className="px-4 mb-6">
+      <div className="px-3 mb-4">
         <SearchBar searchData={searchData} onSearchResultClick={onSearchResultClick} />
       </div>
 
-      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto">
-        {navItems.map((item) => {
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+        {navItems.map((item, index) => {
           const isActive = currentView === item.id;
           return (
-            <button
-              key={item.id}
-              onClick={() => onChangeView(item.id)}
-              className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-apple transition-all duration-300 font-semibold text-sm ${
-                isActive 
-                  ? 'bg-surface text-brand-500 apple-shadow scale-[1.02]' 
-                  : 'text-text-secondary hover:bg-surface/50 hover:text-text-primary'
-              }`}
-            >
-              <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5] text-brand-500' : 'stroke-[1.5]'}`} />
-              {item.label}
-            </button>
+            <React.Fragment key={item.id}>
+              {index === 3 && (
+                <div className="mx-3 my-2 h-px bg-border/50" />
+              )}
+              <button
+                onClick={() => onChangeView(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-apple transition-all duration-300 font-semibold text-sm ${
+                  isActive
+                    ? 'bg-surface text-brand-500 apple-shadow'
+                    : 'text-text-secondary hover:bg-surface/50 hover:text-text-primary'
+                }`}
+              >
+                <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5] text-brand-500' : 'stroke-[1.5]'}`} />
+                {item.label}
+              </button>
+            </React.Fragment>
           );
         })}
       </nav>
 
-      <div className="p-6 border-t border-border space-y-3">
+      <div className="p-4 border-t border-border space-y-2">
         {currentUser ? (
           <div className="flex flex-col gap-2 p-4 bg-surface rounded-apple border border-border/50">
             <div className="flex items-center gap-3">

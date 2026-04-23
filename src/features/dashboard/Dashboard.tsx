@@ -146,7 +146,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
   }, [lessons]);
 
   return (
-    <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -185,10 +185,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
       </div>
 
       {/* Main Grid: Mission + Technical Precision */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
         {/* Continue Learning Card */}
-        <div className="lg:col-span-2 bg-surface rounded-[40px] p-12 apple-shadow-lg border border-border flex flex-col justify-between relative overflow-hidden group">
+        <div className="lg:col-span-3 bg-surface rounded-[40px] p-8 apple-shadow-lg border border-border flex flex-col justify-between relative overflow-hidden group">
           <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] -mr-32 -mt-32 pointer-events-none opacity-40 group-hover:opacity-60 transition-opacity duration-1000"></div>
           
           <div className="relative z-10">
@@ -196,14 +196,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
               <span className="text-xs font-extrabold tracking-[0.2em] text-brand-500 uppercase">Current Mission</span>
               <div className="h-px flex-1 bg-brand-500/20"></div>
             </div>
-            <h3 className="text-5xl font-extrabold text-text-primary mb-6 tracking-tight font-serif leading-tight">
+            <h3 className="text-4xl font-extrabold text-text-primary mb-6 tracking-tight font-serif leading-tight">
               {nextLesson.title}
             </h3>
-            <p className="text-text-muted text-2xl max-w-2xl mb-12 leading-relaxed font-serif">
+            <p className="text-text-muted text-lg max-w-2xl mb-8 leading-relaxed font-serif">
               {nextLesson.description}
             </p>
-            
-            <div className="space-y-4 mb-12">
+
+            <div className="space-y-4 mb-8">
               <div className="flex justify-between items-end">
                 <span className="text-sm font-bold text-text-muted uppercase tracking-widest">Overall Progress</span>
                 <span className="text-2xl font-extrabold text-brand-500">{progressPercent}%</span>
@@ -218,23 +218,23 @@ const Dashboard: React.FC<DashboardProps> = ({ onContinue }) => {
 
             <button 
               onClick={onContinue}
-              className="inline-flex items-center gap-4 px-12 py-6 bg-brand-500 text-white rounded-apple font-bold text-xl hover:bg-brand-600 transition-all hover:gap-6 apple-shadow-lg active:scale-95"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-brand-500 text-white rounded-apple font-bold text-base hover:bg-brand-600 transition-all hover:gap-4 apple-shadow-lg active:scale-95"
             >
-              Continue Mission <ArrowRight className="w-7 h-7 stroke-[2.5]" />
+              Continue Mission <ArrowRight className="w-5 h-5 stroke-[2.5]" />
             </button>
           </div>
         </div>
 
         {/* Skill Radar */}
-        <div className="bg-surface rounded-[40px] p-10 apple-shadow-lg border border-border flex flex-col items-center">
-            <h4 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6 opacity-60 w-full">Mastery Goal</h4>
-            <div className="h-72 w-full">
+        <div className="lg:col-span-2 bg-surface rounded-[40px] p-6 apple-shadow-lg border border-border flex flex-col">
+            <h4 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4 opacity-80 self-start">Mastery Goal</h4>
+            <div className="min-h-[300px] w-full flex-1">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="58%" data={skillData} margin={{ top: 24, right: 36, bottom: 24, left: 36 }}>
+                <RadarChart cx="50%" cy="50%" outerRadius="62%" data={skillData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
                   <PolarGrid stroke="var(--color-border)" strokeWidth={1} />
                   <PolarAngleAxis
                     dataKey="subject"
-                    tick={{ fill: 'var(--color-text-muted)', fontSize: 11, fontWeight: 800, letterSpacing: '0.02em' }}
+                    tick={{ fill: 'var(--color-text-muted)', fontSize: 10, fontWeight: 800, letterSpacing: '0.02em' }}
                   />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                   <Radar
