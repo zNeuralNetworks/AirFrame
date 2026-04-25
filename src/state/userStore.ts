@@ -156,9 +156,15 @@ export const useUserStore = create<UserState>()(
 
             // Sync with Firestore
             await get().actions.syncProgress();
-          } catch (error) {
+          } catch (error: any) {
             console.error("Google Login failed", error);
             set({ isLoading: false });
+            if (error?.code === 'auth/unauthorized-domain') {
+              throw new Error(
+                `This domain is not authorized for Google sign-in. ` +
+                `Add "${window.location.hostname}" to Firebase Console → Authentication → Settings → Authorized domains.`
+              );
+            }
             throw error;
           }
         },

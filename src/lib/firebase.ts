@@ -4,8 +4,16 @@ import { getFirestore, getDocFromServer, doc } from 'firebase/firestore';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 import firebaseConfig from '../../firebase-applet-config.json';
 
+// Allow per-deployment authDomain override so OAuth works on custom domains.
+// Set VITE_FIREBASE_AUTH_DOMAIN in your .env to the domain where this app is hosted,
+// then add that same domain to Firebase Console → Authentication → Authorized domains.
+const resolvedConfig = {
+  ...firebaseConfig,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfig.authDomain,
+};
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(resolvedConfig);
 
 // Initialize Services
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || '(default)');
