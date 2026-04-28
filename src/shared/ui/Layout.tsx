@@ -11,6 +11,7 @@ export interface NavItem {
   id: string;
   label: string;
   icon: React.ElementType;
+  badge?: string;
 }
 
 export interface SearchableItem {

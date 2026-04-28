@@ -13,6 +13,7 @@
 - Firebase Auth and Firestore are the only backend. Do not reintroduce `/api/*`, JWT auth, Express, or lowdb.
 - Cloud Run deployment uses `Dockerfile`, `nginx.conf`, and `cloudbuild.yaml` to serve the static Vite build on port 8080.
 - `npm run build` runs Vite and copies root-level `corgimascot-*.png` files into `dist/`.
+- Token efficiency preference: graph/status first, targeted reads only, capped command output, focused tests before full suites, and avoid reading `.claude/worktrees/*` or other cache blobs unless directly requested.
 
 ## Current Repo Facts
 

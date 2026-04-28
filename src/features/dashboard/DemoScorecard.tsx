@@ -89,11 +89,14 @@ const DemoScorecard: React.FC = () => {
       {/* Header */}
       <div className="af-page-header mb-10">
         <div className="af-heading-group">
-           <div className="flex items-center gap-3 mb-2">
+           <div className="flex flex-wrap items-center gap-3 mb-2">
               <div className="p-2 bg-apple-indigo/10 text-apple-indigo rounded-lg">
                  <ClipboardCheck className="w-6 h-6" />
               </div>
               <h1 className="af-page-title">Demo Scorecard</h1>
+              <span className="rounded-full border border-amber-300/70 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-700">
+                 BETA - Content being finalized
+              </span>
            </div>
            <p className="af-page-subtitle">Self-evaluation tool for sales engineering excellence.</p>
         </div>

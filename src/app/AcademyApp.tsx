@@ -139,8 +139,8 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
       { id: 'learn', label: 'Airframe Academy', icon: BookOpen },
       { id: 'databank', label: 'Databank', icon: BookCopy },
       { id: 'refresher', label: 'Refresher', icon: Zap },
-      { id: 'demo-copilot', label: 'Demo Co-Pilot', icon: Compass },
-      { id: 'scorecard', label: 'Demo Scorecard', icon: ClipboardCheck },
+      { id: 'demo-copilot', label: 'Demo Co-Pilot', icon: Compass, badge: 'BETA' },
+      { id: 'scorecard', label: 'Demo Scorecard', icon: ClipboardCheck, badge: 'BETA' },
       { id: 'settings', label: 'Settings', icon: SettingsIcon },
     ];
 

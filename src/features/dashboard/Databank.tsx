@@ -1,17 +1,57 @@
-import React, { useState, useMemo, Suspense, useEffect } from 'react';
-import { BookCopy, GitCompare, ChevronsUpDown, Phone, Users, BookText, Check, Search, Info, BrainCircuit, X, Beaker, Briefcase } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { BookCopy, GitCompare, ChevronsUpDown, Phone, Users, BookText, Check, Search, Info, BrainCircuit, Beaker, Briefcase } from 'lucide-react';
 import { COMPARISON_DATA } from '../../content/comparisons';
 import { CHEATSHEETS } from '../../content/cheatsheets';
-import { Lesson, GlossaryTerm } from '../../types';
-import { GLOSSARY } from '../../content/glossary';
-import { getSimulationComponent } from '../simulations/SimulationRegistry';
-import SimulationLoader from '../simulations/SimulationLoader';
+import { Lesson, GlossaryTerm, SimulationType } from '../../types';
+import { getVisualComponent } from '../curriculum/visuals/VisualRegistry';
 
 const ICONS: Record<string, React.ElementType> = {
   Phone,
   Users,
   BookText,
   Beaker,
+};
+
+const GLOSSARY_VISUALS: Partial<Record<NonNullable<SimulationType>, {
+  visualId: string;
+  title: string;
+  description: string;
+}>> = {
+  'signal-thermometer': {
+    visualId: 'SignalNoiseRatio',
+    title: 'Signal Quality Preview',
+    description: 'RSSI matters only in context: signal must stay sufficiently above the noise floor.'
+  },
+  'channel-hex': {
+    visualId: 'ChannelInterference',
+    title: 'Channel Reuse Preview',
+    description: 'CCI is airtime contention. Nearby APs on the same channel must wait for each other.'
+  },
+  'roam-lab': {
+    visualId: 'RoamingDecisionVisual',
+    title: 'Roaming Decision Preview',
+    description: 'The client decides when to scan and roam; infrastructure can only guide the decision.'
+  },
+  'spectrum-analyzer': {
+    visualId: 'InterferenceGraph',
+    title: 'Interference Preview',
+    description: 'Polite Wi-Fi traffic leaves airtime gaps. Non-Wi-Fi energy can occupy the medium continuously.'
+  },
+  'ofdma-tetris': {
+    visualId: 'OFDMAVisual',
+    title: 'OFDMA Packing Preview',
+    description: 'OFDMA improves efficiency by dividing airtime into smaller resource units for multiple clients.'
+  },
+  'wips-guard': {
+    visualId: 'MarkerPacketVisual',
+    title: 'WIPS Classification Preview',
+    description: 'Deterministic rogue classification depends on correlating wired and wireless evidence.'
+  },
+  'db-game': {
+    visualId: 'DecibelVisualizer',
+    title: 'Decibel Preview',
+    description: 'Small dB changes represent multiplicative changes in power, not linear steps.'
+  }
 };
 
 interface DatabankProps {
@@ -62,7 +102,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
   const dataB = COMPARISON_DATA[compareB];
   const comparisonKeys = dataA ? Object.keys(dataA) : [];
 
-  const SelectedSim = selectedTerm?.visualId ? getSimulationComponent(selectedTerm.visualId) : null;
+  const selectedGlossaryVisual = selectedTerm?.visualId ? GLOSSARY_VISUALS[selectedTerm.visualId] : null;
   const relevantLesson = selectedTerm?.lessonId ? lessons.find(l => l.id === selectedTerm.lessonId) : null;
 
   const renderExpandableList = (items: typeof CHEATSHEETS) => (
@@ -163,18 +203,26 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                           <p className="text-text-secondary text-lg md:text-xl leading-8">{selectedTerm.definition}</p>
                         </div>
                         
-                        {SelectedSim && (
-                            <div className="bg-surface rounded-apple p-6 border border-border apple-shadow-lg">
-                                <div className="aspect-video h-72 mx-auto">
-                                    <div className="w-full h-full scale-[0.95] origin-center">
-                                        <SimulationLoader 
-                                            simId={selectedTerm.visualId!} 
-                                            lessonId={selectedTerm.lessonId} 
-                                            onComplete={() => {}} 
-                                            Component={SelectedSim} 
-                                        />
+                        {selectedTerm.visualId && (
+                            <div className="bg-surface rounded-apple p-5 md:p-6 border border-border apple-shadow-lg overflow-hidden">
+                                {selectedGlossaryVisual ? (
+                                  <div className="space-y-4">
+                                    <div>
+                                      <h4 className="text-base font-bold text-text-primary">{selectedGlossaryVisual.title}</h4>
+                                      <p className="text-sm leading-6 text-text-muted">{selectedGlossaryVisual.description}</p>
                                     </div>
-                                </div>
+                                    <div className="overflow-hidden rounded-2xl [&>div]:my-0">
+                                      {getVisualComponent(selectedGlossaryVisual.visualId)}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="rounded-2xl border border-dashed border-border bg-app/60 p-6 text-center">
+                                    <h4 className="text-base font-bold text-text-primary">Interactive lab available</h4>
+                                    <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-text-muted">
+                                      This concept uses a full lab simulation that is best viewed in the lesson workspace.
+                                    </p>
+                                  </div>
+                                )}
                             </div>
                         )}
 
@@ -190,7 +238,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                         {relevantLesson && (
                             <button onClick={() => onSelectLesson(relevantLesson)} className="w-full af-primary-action">
                                 <BookText className="w-7 h-7 stroke-[2.5]" />
-                                Go to Lesson: {relevantLesson.title}
+                                Open Related Lesson/Lab: {relevantLesson.title}
                             </button>
                         )}
                     </div>

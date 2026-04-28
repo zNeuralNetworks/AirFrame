@@ -68,8 +68,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-text-secondary hover:bg-surface/50 hover:text-text-primary'
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5] text-brand-500' : 'stroke-[1.5]'}`} />
-                {item.label}
+                <item.icon className={`w-5 h-5 shrink-0 ${isActive ? 'stroke-[2.5] text-brand-500' : 'stroke-[1.5]'}`} />
+                <span className="flex-1 truncate text-left">{item.label}</span>
+                {item.badge && (
+                  <span className="shrink-0 rounded-full border border-amber-300/70 bg-amber-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-700 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-300">
+                    {item.badge}
+                  </span>
+                )}
               </button>
             </React.Fragment>
           );

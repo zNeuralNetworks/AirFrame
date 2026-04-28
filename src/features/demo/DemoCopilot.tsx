@@ -4,7 +4,6 @@ import { Lesson } from '../../types';
 import { DEMO_TRACKS } from '../../content/copilot';
 import { 
   Compass,
-  PlayCircle,
   FileText,
   Loader2,
   Wrench,
@@ -30,7 +29,6 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
   
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isLaunching, setIsLaunching] = useState(false);
 
   const filteredTracks = useMemo(() => DEMO_TRACKS.filter(t => t.roles.includes(activeRole)), [activeRole]);
   
@@ -102,9 +100,12 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
       <header className="space-y-6">
         <div className="af-page-header items-start">
           <div className="af-heading-group">
-             <div className="flex items-center gap-3 mb-2">
+             <div className="flex flex-wrap items-center gap-3 mb-2">
                 <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><Compass className="w-6 h-6" /></div>
                 <h1 className="af-page-title">Demo Co-Pilot</h1>
+                <span className="rounded-full border border-amber-300/70 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-700">
+                  BETA - Content being finalized
+                </span>
              </div>
              <p className="af-page-subtitle">
                Your interactive guide to a perfect, repeatable demonstration.
@@ -114,9 +115,6 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
              <button onClick={handleExportScript} disabled={isDownloading} className="af-secondary-action disabled:opacity-50">
                 {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
                 {isDownloading ? 'Exporting...' : 'Export Script'}
-             </button>
-             <button onClick={() => window.open('https://launchpad.arista.com', '_blank')} className="af-primary-action py-3">
-                <PlayCircle className="w-4 h-4" /> Launch Pod
              </button>
           </div>
         </div>
