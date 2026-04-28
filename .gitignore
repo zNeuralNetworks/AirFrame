@@ -12,6 +12,7 @@ dist
 dist-ssr
 playwright-report/
 test-results/
+tests/galen/reports/
 output/playwright/
 *.local
 .env
