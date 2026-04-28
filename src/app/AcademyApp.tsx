@@ -19,19 +19,19 @@ import { CHEATSHEETS } from '../content/cheatsheets';
 const AuthWall: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex flex-col items-center justify-center h-full p-12 text-center gap-8 select-none">
-      <div className="p-6 bg-brand-500/10 rounded-[32px] border border-brand-500/20">
-        <Lock className="w-16 h-16 text-brand-500" />
+    <div className="flex flex-col items-center justify-center h-full p-8 md:p-12 text-center gap-6 select-none">
+      <div className="p-5 bg-brand-500/10 rounded-apple border border-brand-500/20">
+        <Lock className="w-14 h-14 text-brand-500" />
       </div>
-      <div className="space-y-3 max-w-sm">
-        <h2 className="text-3xl font-extrabold text-text-primary tracking-tight">Sign in to fly</h2>
-        <p className="text-text-muted text-lg font-medium leading-relaxed">
+      <div className="af-heading-group max-w-sm">
+        <h2 className="af-section-title">Sign in to fly</h2>
+        <p className="af-page-subtitle">
           Create a free account to access all labs, track your progress, and earn your certification.
         </p>
       </div>
       <button
         onClick={() => setIsOpen(true)}
-        className="px-10 py-5 bg-brand-500 text-white rounded-apple font-bold text-lg hover:bg-brand-600 transition-all hover:scale-105 active:scale-95 apple-shadow-lg"
+        className="af-primary-action"
       >
         Sign In / Create Account
       </button>

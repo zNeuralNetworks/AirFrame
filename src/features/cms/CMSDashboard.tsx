@@ -139,30 +139,30 @@ const CMSDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-app p-6 md:p-12">
-      <div className="max-w-7xl mx-auto space-y-12">
-        <header className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <h1 className="text-5xl font-extrabold text-text-primary tracking-tight font-serif">Airframe CMS</h1>
-            <p className="text-text-muted text-xl font-medium mt-2">Manage curriculum, insights, and user analytics.</p>
+    <div className="min-h-screen bg-app">
+      <div className="af-page">
+        <header className="af-page-header">
+          <div className="text-center md:text-left af-heading-group">
+            <h1 className="af-page-title">Airframe CMS</h1>
+            <p className="af-page-subtitle">Manage curriculum, insights, and user analytics.</p>
           </div>
           <div className="flex gap-4">
             {(activeTab !== 'feedback' && activeTab !== 'users') && (
               <button 
                 onClick={() => { setEditingItem({}); setIsNew(true); }}
-                className="flex items-center gap-3 px-8 py-4 bg-brand-500 text-white rounded-apple font-bold text-lg apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="af-primary-action"
               >
-                <Plus className="w-6 h-6 stroke-[2.5]" />
+                <Plus className="w-5 h-5 stroke-[2.5]" />
                 Add New
               </button>
             )}
           </div>
         </header>
 
-        <div className="flex flex-col md:flex-row gap-12">
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar Nav */}
           <aside className="w-full md:w-72 shrink-0">
-            <nav className="space-y-3 sticky top-12">
+            <nav className="space-y-2 sticky top-12">
               {[
                 { id: 'lessons', label: 'Lessons', icon: BookOpen },
                 { id: 'glossary', label: 'Glossary', icon: MessageSquare },
@@ -173,9 +173,9 @@ const CMSDashboard: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as ContentType)}
-                  className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-lg transition-all ${activeTab === tab.id ? 'bg-white text-brand-500 apple-shadow scale-[1.02]' : 'text-text-muted hover:bg-white/50 hover:text-text-primary'}`}
+                  className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl font-semibold text-base transition-all ${activeTab === tab.id ? 'bg-white text-brand-500 apple-shadow scale-[1.01]' : 'text-text-muted hover:bg-white/50 hover:text-text-primary'}`}
                 >
-                  <tab.icon className={`w-6 h-6 ${activeTab === tab.id ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
+                  <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
                   {tab.label}
                 </button>
               ))}
@@ -224,21 +224,21 @@ const CMSDashboard: React.FC = () => {
               initial={{ scale: 0.95, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 30 }}
-              className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-white/20"
+              className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-apple-lg shadow-2xl overflow-hidden flex flex-col border border-white/20"
             >
-              <header className="p-8 border-b border-border flex justify-between items-center shrink-0">
-                <h2 className="text-3xl font-extrabold text-text-primary tracking-tight">
+              <header className="p-6 md:p-8 border-b border-border flex justify-between items-center shrink-0">
+                <h2 className="af-section-title">
                   {activeTab === 'feedback' ? 'Feedback Details' : 
                    activeTab === 'users' ? 'User Progress Report' :
                    (isNew ? 'Create New' : 'Edit') + ' ' + (activeTab === 'lessons' ? 'Lesson' : activeTab === 'glossary' ? 'Glossary Term' : 'Kill Shot')}
                 </h2>
                 <button onClick={() => setEditingItem(null)} className="p-3 hover:bg-app rounded-full transition-colors">
-                  <X className="w-7 h-7 text-text-muted stroke-[2.5]" />
+                  <X className="w-6 h-6 text-text-muted stroke-[2.5]" />
                 </button>
               </header>
 
               <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
-                <div className="flex-1 overflow-y-auto p-10 space-y-8 border-r border-border custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 border-r border-border custom-scrollbar">
                   {activeTab === 'feedback' ? (
                     <CMSFeedbackView item={editingItem} />
                   ) : activeTab === 'users' ? (
@@ -254,32 +254,32 @@ const CMSDashboard: React.FC = () => {
                 </div>
 
                 {/* Preview Area */}
-                <div className="w-full md:w-[400px] bg-app/50 overflow-y-auto p-10 custom-scrollbar">
-                  <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6 opacity-60">
+                <div className="w-full md:w-[400px] bg-app/50 overflow-y-auto p-6 md:p-8 custom-scrollbar">
+                  <h3 className="af-eyebrow mb-6">
                     {activeTab === 'feedback' ? 'Action Panel' : 
                      activeTab === 'users' ? 'Quick Actions' :
                      'Live Preview'}
                   </h3>
                   {activeTab === 'feedback' ? (
                     <div className="space-y-6">
-                      <p className="text-base text-text-secondary mb-8 leading-relaxed font-medium">Review this feedback and take necessary action. You can delete it once resolved.</p>
+                      <p className="af-body-sm mb-8">Review this feedback and take necessary action. You can delete it once resolved.</p>
                       <button 
                         onClick={() => handleDelete(editingItem.firestoreId)}
-                        className="w-full flex items-center justify-center gap-3 px-6 py-5 bg-red-50 text-apple-red rounded-2xl font-bold text-lg hover:bg-red-100 transition-all apple-shadow"
+                        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-red-50 text-apple-red rounded-2xl font-semibold text-base hover:bg-red-100 transition-all apple-shadow"
                       >
                         <Trash2 className="w-6 h-6 stroke-[2.5]" />
                         Delete Feedback
                       </button>
                       <button 
                         onClick={() => setEditingItem(null)}
-                        className="w-full flex items-center justify-center gap-3 px-6 py-5 bg-white border border-border text-text-primary rounded-2xl font-bold text-lg hover:bg-app transition-all apple-shadow"
+                        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border border-border text-text-primary rounded-2xl font-semibold text-base hover:bg-app transition-all apple-shadow"
                       >
                         Mark as Read
                       </button>
                     </div>
                   ) : activeTab === 'users' ? (
                     <div className="space-y-6">
-                      <p className="text-sm text-text-muted leading-relaxed">View detailed analytics for this user. You can reset their progress if they request a fresh start (caution: irreversible).</p>
+                      <p className="af-body-sm">View detailed analytics for this user. You can reset their progress if they request a fresh start (caution: irreversible).</p>
                       <button
                          className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${
                            confirmResetId === editingItem?.firestoreId
@@ -292,23 +292,23 @@ const CMSDashboard: React.FC = () => {
                       </button>
                     </div>
                   ) : activeTab === 'insights' ? (
-                    <div className="bg-white p-8 rounded-apple-lg apple-shadow border border-border">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-600 mb-3 block">{editingItem.context || 'CATEGORY'}</span>
-                      <h4 className="text-2xl font-extrabold text-text-primary mb-4 tracking-tight leading-tight">{editingItem.title || 'Insight Title'}</h4>
-                      <p className="text-text-secondary text-base leading-relaxed italic">{editingItem.text || 'The insight text will appear here...'}</p>
+                    <div className="af-card-compact bg-white">
+                      <span className="af-meta text-brand-600 mb-3 block">{editingItem.context || 'CATEGORY'}</span>
+                      <h4 className="af-card-title mb-4">{editingItem.title || 'Insight Title'}</h4>
+                      <p className="af-body-sm italic">{editingItem.text || 'The insight text will appear here...'}</p>
                     </div>
                   ) : activeTab === 'lessons' ? (
-                    <div className="prose prose-slate prose-lg max-w-none font-serif">
+                    <div className="prose prose-slate prose-lg max-w-none">
                       <ReactMarkdown>{editingItem.content || '*No content yet*'}</ReactMarkdown>
                     </div>
                   ) : (
-                    <div className="bg-white p-8 rounded-apple-lg apple-shadow border border-border">
-                      <h4 className="text-3xl font-extrabold text-text-primary mb-4 tracking-tight font-serif">{editingItem.term || 'Term Name'}</h4>
-                      <p className="text-text-secondary text-xl leading-relaxed font-serif mb-8">{editingItem.definition || 'Definition will appear here...'}</p>
+                    <div className="af-card-compact bg-white">
+                      <h4 className="text-2xl font-bold text-text-primary mb-4">{editingItem.term || 'Term Name'}</h4>
+                      <p className="text-text-secondary text-lg leading-8 mb-8">{editingItem.definition || 'Definition will appear here...'}</p>
                       {editingItem.misconception && (
                         <div className="p-6 bg-orange-50 border border-orange-100 rounded-apple">
-                          <h5 className="text-xs font-bold text-apple-orange uppercase tracking-widest mb-3">Misconception</h5>
-                          <p className="text-lg text-orange-900 italic font-medium leading-relaxed">"{editingItem.misconception}"</p>
+                          <h5 className="af-eyebrow text-apple-orange mb-3">Misconception</h5>
+                          <p className="text-base text-orange-900 italic font-medium leading-7">"{editingItem.misconception}"</p>
                         </div>
                       )}
                     </div>
@@ -316,18 +316,18 @@ const CMSDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <footer className="p-8 border-t border-border flex justify-end gap-6 shrink-0 bg-white/80 backdrop-blur-md">
+              <footer className="p-6 md:p-8 border-t border-border flex justify-end gap-4 shrink-0 bg-white/80 backdrop-blur-md">
                 <button 
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="px-8 py-4 text-text-muted font-bold text-lg hover:bg-app rounded-apple transition-all"
+                  className="px-6 py-3 text-text-muted font-semibold text-base hover:bg-app rounded-apple transition-all"
                 >
                   {(activeTab === 'feedback' || activeTab === 'users') ? 'Close' : 'Cancel'}
                 </button>
                 {(activeTab !== 'feedback' && activeTab !== 'users') && (
                   <button 
                     onClick={() => handleSave()}
-                    className="flex items-center gap-3 px-12 py-4 bg-brand-500 text-white rounded-apple font-bold text-lg apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="af-primary-action"
                   >
                     <Save className="w-6 h-6 stroke-[2.5]" />
                     Save Changes

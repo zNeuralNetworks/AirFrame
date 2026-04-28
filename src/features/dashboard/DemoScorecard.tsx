@@ -84,30 +84,30 @@ const DemoScorecard: React.FC = () => {
   const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 md:p-10 pb-40">
+    <div className="af-page-narrow">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-border pb-8">
-        <div>
+      <div className="af-page-header mb-10">
+        <div className="af-heading-group">
            <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-apple-indigo/10 text-apple-indigo rounded-lg">
                  <ClipboardCheck className="w-6 h-6" />
               </div>
-              <h1 className="text-3xl font-bold text-text-primary">Demo Scorecard</h1>
+              <h1 className="af-page-title">Demo Scorecard</h1>
            </div>
-           <p className="text-text-muted text-lg">Self-evaluation tool for sales engineering excellence.</p>
+           <p className="af-page-subtitle">Self-evaluation tool for sales engineering excellence.</p>
         </div>
 
         <div className="flex gap-4 items-center">
            <button
              onClick={() => { setScores({}); localStorage.removeItem(SCORECARD_KEY); }}
-             className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-text-primary font-medium transition-colors"
+             className="af-secondary-action bg-transparent border-transparent shadow-none"
            >
               <RefreshCw className="w-4 h-4" /> Reset
            </button>
            <button 
              onClick={() => window.print()}
-             className="flex items-center gap-2 px-5 py-2 bg-brand-500 text-white rounded-xl font-bold hover:bg-brand-600 transition-colors shadow-sm"
+             className="af-primary-action py-3"
            >
               <Printer className="w-4 h-4" /> Print Report
            </button>
@@ -119,8 +119,8 @@ const DemoScorecard: React.FC = () => {
          {/* Main Form */}
          <div className="lg:col-span-2 space-y-8">
             {CRITERIA.map((cat, idx) => (
-               <div key={idx} className="bg-surface rounded-2xl border border-border p-6 shadow-sm">
-                  <h3 className="text-lg font-bold text-text-primary mb-4 pb-2 border-b border-border flex items-center gap-2">
+               <div key={idx} className="af-card-compact">
+                  <h3 className="af-card-title mb-4 pb-2 border-b border-border flex items-center gap-2">
                      <span className="w-6 h-6 rounded-full bg-app text-text-muted flex items-center justify-center text-xs">{idx + 1}</span>
                      {cat.category}
                   </h3>
@@ -128,9 +128,9 @@ const DemoScorecard: React.FC = () => {
                      {cat.items.map((item) => (
                         <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                            <div className="flex-1">
-                              <p className="text-text-secondary font-medium text-sm">{item.text}</p>
+                              <p className="text-text-secondary font-normal text-sm leading-6">{item.text}</p>
                               {item.weight > 1 && (
-                                 <span className="text-[10px] text-brand-600 font-bold uppercase tracking-wider bg-brand-50 px-1.5 py-0.5 rounded mt-1 inline-block">
+                                 <span className="af-meta text-brand-600 bg-brand-50 px-1.5 py-0.5 rounded mt-1 inline-block">
                                     {item.weight}x Impact
                                  </span>
                               )}
@@ -138,7 +138,7 @@ const DemoScorecard: React.FC = () => {
                            <div className="flex gap-2 shrink-0">
                               {[0, 1, 2].map((rating) => {
                                  const isSelected = scores[item.id] === rating;
-                                 let btnClass = "px-3 py-2 rounded-lg border text-xs font-bold transition-all w-20 flex justify-center";
+                                 let btnClass = "px-3 py-2 rounded-lg border text-xs font-semibold transition-all w-20 flex justify-center";
                                  
                                  if (rating === 0) btnClass += isSelected ? " bg-apple-red/10 border-apple-red text-apple-red" : " border-border text-text-muted hover:border-apple-red/40 hover:text-apple-red";
                                  if (rating === 1) btnClass += isSelected ? " bg-apple-orange/10 border-apple-orange text-apple-orange" : " border-border text-text-muted hover:border-apple-orange/40 hover:text-apple-orange";
@@ -166,36 +166,36 @@ const DemoScorecard: React.FC = () => {
 
          {/* Score Sidebar */}
          <div className="lg:col-span-1">
-            <div className="bg-slate-900 text-white rounded-3xl p-8 sticky top-8 shadow-xl">
+            <div className="bg-slate-900 text-white rounded-apple p-8 sticky top-8 shadow-xl">
                <div className="flex items-center gap-3 mb-6 opacity-80">
                   <TrendingUp className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">Performance</span>
+                  <span className="af-eyebrow text-white/80">Performance</span>
                </div>
                
                <div className="text-center mb-8">
-                  <div className={`text-6xl font-extrabold mb-2 ${getRatingColor(percentage)}`}>
+                  <div className={`text-5xl font-bold mb-2 ${getRatingColor(percentage)}`}>
                      {percentage}%
                   </div>
-                  <div className="text-2xl font-bold text-white/80">{getGrade(percentage)}</div>
+                  <div className="text-xl font-semibold text-white/80">{getGrade(percentage)}</div>
                   <div className="text-sm text-white/40 mt-1">{totalScore} / {maxScore} Points</div>
                </div>
 
                <div className="space-y-4">
                   <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-                     <h4 className="font-bold text-brand-300 mb-1 flex items-center gap-2">
+                     <h4 className="font-semibold text-brand-300 mb-1 flex items-center gap-2">
                         <Star className="w-4 h-4" /> Power Tip
                      </h4>
-                     <p className="text-xs text-white/70 leading-relaxed">
+                     <p className="text-sm text-white/70 leading-6">
                         Don't obsess over perfection. Authenticity connects better than a scripted robot. If you make a mistake, own it and show how to fix it.
                      </p>
                   </div>
 
                   {percentage < 70 && (
                      <div className="p-4 bg-apple-red/10 rounded-xl border border-apple-red/30">
-                        <h4 className="font-bold text-apple-red mb-1 flex items-center gap-2">
+                        <h4 className="font-semibold text-apple-red mb-1 flex items-center gap-2">
                            <AlertCircle className="w-4 h-4" /> Focus Area
                         </h4>
-                        <p className="text-xs text-white/70 leading-relaxed">
+                        <p className="text-sm text-white/70 leading-6">
                            You are missing key opportunities. Review the "The Golden Path" track in the Demo Roadmap to restructure your flow.
                         </p>
                      </div>
@@ -203,10 +203,10 @@ const DemoScorecard: React.FC = () => {
 
                   {percentage >= 90 && (
                      <div className="p-4 bg-apple-green/10 rounded-xl border border-apple-green/30">
-                        <h4 className="font-bold text-apple-green mb-1 flex items-center gap-2">
+                        <h4 className="font-semibold text-apple-green mb-1 flex items-center gap-2">
                            <CheckCircle2 className="w-4 h-4" /> Ready for Launch
                         </h4>
-                        <p className="text-xs text-white/70 leading-relaxed">
+                        <p className="text-sm text-white/70 leading-6">
                            Excellent work. You are telling a compelling story, not just showing features. Go close the deal.
                         </p>
                      </div>

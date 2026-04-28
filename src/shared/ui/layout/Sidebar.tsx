@@ -36,16 +36,16 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside data-galen-sidebar className="hidden md:flex flex-col w-64 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
-      <div className="px-5 py-4 flex items-center gap-4">
+      <div className="px-5 py-4 flex items-center gap-3">
         <div className="bg-brand-500 p-2 rounded-xl transition-all shadow-lg shadow-brand-500/20">
-          <Radio className="text-white w-6 h-6" />
+          <Radio className="text-white w-5 h-5" />
         </div>
-        <h1 className="text-xl font-bold text-text-primary tracking-tight">
+        <h1 className="text-lg font-bold text-text-primary">
           {title}
         </h1>
       </div>
 
-      <div className="px-3 mb-4">
+      <div className="px-3 mb-3">
         <SearchBar searchData={searchData} onSearchResultClick={onSearchResultClick} />
       </div>
 
@@ -59,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               )}
               <button
                 onClick={() => onChangeView(item.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-apple transition-all duration-300 font-semibold text-sm ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-300 font-semibold text-sm ${
                   isActive
                     ? 'bg-surface text-brand-500 apple-shadow'
                     : 'text-text-secondary hover:bg-surface/50 hover:text-text-primary'
@@ -75,22 +75,22 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <div className="p-4 border-t border-border space-y-2">
         {currentUser ? (
-          <div className="flex flex-col gap-2 p-4 bg-surface rounded-apple border border-border/50">
+          <div className="flex flex-col gap-2 p-4 bg-surface rounded-2xl border border-border/50">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-brand-500/10 text-brand-600 rounded-xl flex items-center justify-center">
-                <User className="w-5 h-5" />
+              <div className="w-9 h-9 bg-brand-500/10 text-brand-600 rounded-xl flex items-center justify-center">
+                <User className="w-4 h-4" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-xs font-black text-brand-600 uppercase tracking-widest mb-0.5">{user.username || 'Learner'}</p>
+                  <p className="af-meta text-brand-600 mb-0.5">{user.username || 'Learner'}</p>
                   {user.isApproved && (
-                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[9px] font-black uppercase tracking-tighter border border-brand-500/20">
+                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[10px] font-semibold uppercase border border-brand-500/20">
                       <ShieldCheck className="w-2.5 h-2.5" />
                       Arista
                     </div>
                   )}
                 </div>
-                <p className="text-sm font-bold text-text-primary truncate">{currentUser.email}</p>
+                <p className="text-sm font-semibold text-text-primary truncate">{currentUser.email}</p>
               </div>
             </div>
             {/* XP progress bar */}
@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             })()}
             <button
               onClick={() => actions.logout()}
-              className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-apple-red hover:bg-apple-red/10 rounded-lg transition-all text-xs font-bold uppercase"
+              className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-apple-red hover:bg-apple-red/10 rounded-lg transition-all text-xs font-semibold uppercase tracking-wide"
             >
               <LogOut className="w-3.5 h-3.5" /> Sign Out
             </button>
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         ) : (
           <button
             onClick={onAuthClick}
-            className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-brand-500 text-white rounded-apple apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all font-bold text-sm"
+            className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-brand-500 text-white rounded-2xl apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all font-semibold text-sm"
           >
             <User className="w-5 h-5" /> Sign In / Up
           </button>
@@ -132,7 +132,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           <button 
             type="button"
             onClick={onPrint}
-            className="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 text-text-muted hover:text-text-primary hover:bg-surface/50 rounded-apple transition-all text-xs font-bold uppercase tracking-wider"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 text-text-muted hover:text-text-primary hover:bg-surface/50 rounded-2xl transition-all text-xs font-semibold uppercase tracking-wider"
           >
             <Printer className="w-4 h-4" /> Print / Save PDF
           </button>
@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {onExitApp && isAdmin && (
           <button
             onClick={onExitApp}
-            className="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 text-text-muted hover:text-text-primary hover:bg-surface/50 rounded-apple transition-all text-xs font-bold uppercase tracking-wider"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 text-text-muted hover:text-text-primary hover:bg-surface/50 rounded-2xl transition-all text-xs font-semibold uppercase tracking-wider"
           >
             <ArrowLeft className="w-4 h-4" /> Switch App
           </button>

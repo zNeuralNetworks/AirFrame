@@ -148,14 +148,14 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
             onClick={() => onSelectLesson(lesson)}
             disabled={isLessonLocked}
             className={`
-                w-full flex items-center gap-6 p-6 rounded-apple border text-left group transition-all
+                w-full flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 md:p-6 rounded-apple border text-left group transition-all
                 ${isLessonLocked
                     ? 'bg-app border-border opacity-50 cursor-not-allowed'
                     : 'bg-surface border-border apple-shadow hover:scale-[1.01] cursor-pointer'}
             `}
             >
             <div className={`
-                w-14 h-14 rounded-full flex items-center justify-center shrink-0 border-2 transition-all
+                w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shrink-0 border-2 transition-all
                 ${lesson.completed 
                     ? 'bg-brand-50 border-brand-500 text-brand-500' 
                     : (isLessonLocked ? 'bg-transparent border-border text-text-muted' : 'bg-transparent border-brand-500 text-brand-500')}
@@ -163,19 +163,19 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                 {lesson.completed ? <CheckCircle2 className="w-7 h-7 stroke-[2.5]" /> : (isLessonLocked ? <Lock className="w-6 h-6 stroke-[1.5]" /> : <Play className="w-6 h-6 fill-current stroke-[2]" />)}
             </div>
             
-            <div className="flex-1">
-                <h3 className={`font-extrabold text-xl tracking-tight ${isLessonLocked ? 'text-text-muted' : 'text-text-primary group-hover:text-brand-500'}`}>
+            <div className="flex-1 min-w-0">
+                <h3 className={`af-card-title ${isLessonLocked ? 'text-text-muted' : 'text-text-primary group-hover:text-brand-500'}`}>
                     {lesson.title}
                 </h3>
-                <p className="text-base text-text-muted line-clamp-1 mt-1 font-medium">{lesson.description}</p>
+                <p className="af-body-sm line-clamp-2 mt-1">{lesson.description}</p>
             </div>
 
             {!isLessonLocked && (
-                <div className="flex flex-col items-end gap-2.5">
-                    <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border ${statusColor}`}>
+                <div className="flex sm:flex-col items-start sm:items-end gap-2.5">
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full af-meta border ${statusColor}`}>
                         <StatusIcon className="w-4 h-4 stroke-[2.5]" /> {statusLabel}
                     </div>
-                    <span className="text-xs text-text-muted flex items-center gap-2 font-bold uppercase tracking-widest">
+                    <span className="af-meta flex items-center gap-2">
                         <Clock className="w-4 h-4 stroke-[2]" /> {lesson.durationMinutes}m
                     </span>
                 </div>
@@ -187,14 +187,14 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
   );
   
   return (
-    <div className="max-w-7xl mx-auto p-6 md:p-12 space-y-12 pb-32 min-h-full">
+    <div className="af-page min-h-full">
        
-       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="text-center md:text-left">
-             <h1 className="text-5xl font-extrabold text-text-primary tracking-tight font-serif">
+       <div className="af-page-header items-start">
+          <div className="text-center md:text-left af-heading-group">
+             <h1 className="af-page-title">
                 {viewMode === 'galaxy' ? 'Knowledge Constellation' : (referenceMode ? 'Airframe Reference' : 'Mission Log')}
              </h1>
-             <p className="text-text-muted mt-2 text-xl font-medium font-serif leading-relaxed">
+             <p className="af-page-subtitle mx-auto md:mx-0">
                 {viewMode === 'galaxy'
                    ? 'Visualize the connections between concepts. Unlock nodes to reveal the path.' 
                    : (referenceMode 
@@ -203,9 +203,9 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
              </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
              {/* View Mode Toggle */}
-             <div className="flex bg-app p-1 rounded-2xl border border-border apple-shadow">
+             <div className="flex bg-app p-1 rounded-2xl border border-border apple-shadow justify-center">
                 <button
                    onClick={() => setViewMode('list')}
                    className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-surface apple-shadow text-brand-500' : 'text-text-muted hover:text-text-primary'}`}
@@ -226,14 +226,14 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
              {viewMode === 'list' && (
                 <button
                    onClick={toggleReferenceMode}
-                   className={`flex items-center gap-1 p-1 rounded-full border transition-all apple-shadow ${
+                   className={`flex items-center justify-center gap-1 p-1 rounded-full border transition-all apple-shadow ${
                       referenceMode ? 'bg-surface border-border' : 'bg-app border-border'
                    }`}
                 >
-                   <div className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${!referenceMode ? 'bg-brand-500 text-white apple-shadow' : 'text-text-muted hover:text-text-primary'}`}>
+                   <div className={`px-5 py-2.5 rounded-full af-meta transition-all ${!referenceMode ? 'bg-brand-500 text-white apple-shadow' : 'text-text-muted hover:text-text-primary'}`}>
                       Learn Path
                    </div>
-                   <div className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${referenceMode ? 'bg-brand-500 text-white apple-shadow' : 'text-text-muted hover:text-text-primary'}`}>
+                   <div className={`px-5 py-2.5 rounded-full af-meta transition-all ${referenceMode ? 'bg-brand-500 text-white apple-shadow' : 'text-text-muted hover:text-text-primary'}`}>
                       Reference
                    </div>
                 </button>
@@ -256,22 +256,22 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                           onClick={() => !isLocked && setExpandedModule(expandedModule === mod.name ? null : mod.name)}
                           disabled={isLocked || referenceMode}
                           className={`
-                             w-full flex items-center gap-8 p-8 rounded-apple-lg border transition-all duration-500 text-left
+                             w-full flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 p-6 md:p-8 rounded-apple-lg border transition-all duration-500 text-left
                              ${isLocked 
                                 ? 'bg-app border-border opacity-60 cursor-not-allowed'
                                 : 'bg-surface border-border apple-shadow hover:scale-[1.01]'}
                           `}
                        >
                           <div className={`
-                             w-20 h-20 rounded-apple flex items-center justify-center text-white shrink-0 apple-shadow z-20 transition-all border-4 border-surface
+                             w-16 h-16 md:w-20 md:h-20 rounded-apple flex items-center justify-center text-white shrink-0 apple-shadow z-20 transition-all border-4 border-surface
                              ${isLocked ? 'bg-slate-200' : (isComplete ? 'bg-brand-500' : mod.color)}
                           `}>
                              {isLocked ? <Lock className="w-10 h-10 text-slate-400 stroke-[1.5]" /> : (referenceMode ? <BookOpen className="w-10 h-10 stroke-[2]" /> : (isComplete ? <CheckCircle2 className="w-10 h-10 stroke-[2.5]" /> : <mod.icon className="w-10 h-10 stroke-[2]" />))}
                           </div>
 
-                          <div className="flex-1">
-                             <div className="flex justify-between items-center">
-                                <h2 className={`text-2xl font-extrabold tracking-tight ${isLocked ? 'text-text-muted' : 'text-text-primary'}`}>
+                          <div className="flex-1 min-w-0">
+                             <div className="flex justify-between items-start gap-4">
+                                <h2 className={`af-section-title ${isLocked ? 'text-text-muted' : 'text-text-primary'}`}>
                                    {mod.name}
                                 </h2>
                                 {!referenceMode && (
@@ -283,14 +283,14 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                                    <div className="h-3 w-40 bg-app rounded-full overflow-hidden border border-border shadow-inner">
                                    <div style={{ width: `${mod.progress}%` }} className={`h-full transition-all duration-1000 ${isLocked ? 'bg-slate-300' : 'bg-apple-green'}`}></div>
                                    </div>
-                                   <span className="text-sm font-bold text-text-muted uppercase tracking-widest">{mod.items.length} Units</span>
+                                   <span className="af-meta">{mod.items.length} Units</span>
                                 </div>
                              )}
                           </div>
                        </button>
 
                        <div className={`
-                          overflow-hidden transition-all duration-700 ease-in-out pl-[6.5rem]
+                          overflow-hidden transition-all duration-700 ease-in-out sm:pl-[6.5rem]
                           ${isExpanded ? 'max-h-[2000px] opacity-100 mt-6' : 'max-h-0 opacity-0'}
                        `}>
                           <div className="pb-6">
@@ -368,12 +368,12 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                     >
                        {isLocked ? <Lock className="w-6 h-6 stroke-[1.5]" /> : (isCompleted ? <CheckCircle2 className="w-8 h-8 stroke-[2.5]" /> : <mod.icon className="w-8 h-8 stroke-[2]" />)}
                        
-                       <span className="absolute -top-8 text-[10px] font-bold uppercase tracking-widest text-white/35">
+                       <span className="absolute -top-8 af-meta text-white/35">
                           M{mod.moduleNumber}
                        </span>
 
                        {/* Label */}
-                       <div className={`absolute top-20 min-w-36 max-w-44 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest leading-snug transition-all ${labelAlign} ${
+                       <div className={`absolute top-20 min-w-36 max-w-44 px-4 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-wide leading-snug transition-all ${labelAlign} ${
                           isLocked ? 'bg-slate-800 text-slate-500' : 'bg-white/10 text-white backdrop-blur-md border border-white/20'
                        }`}>
                           {getModuleTitle(mod.name)}
@@ -393,7 +393,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                     </button>
                     
                     <div className="mt-10">
-                       <span className="text-xs font-bold text-white/40 uppercase tracking-widest mb-1 block">Galaxy View › Module</span>
+                       <span className="text-xs font-bold text-brand-400 uppercase tracking-widest mb-3 block">Module Detail</span>
                        <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">{selectedGalaxyModule}</h2>
                        
                        <div className="galaxy-lessons-list">

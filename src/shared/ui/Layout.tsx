@@ -92,12 +92,12 @@ const Layout: React.FC<LayoutProps> = ({
 
       <button 
         onClick={() => setIsFeedbackOpen(true)}
-        className="no-print fixed bottom-28 md:bottom-8 right-8 bg-brand-500 hover:bg-brand-600 text-white rounded-full px-8 py-5 apple-shadow-lg hover:scale-105 active:scale-95 transition-all z-40 flex items-center gap-3.5 group"
+        className="no-print fixed bottom-28 md:bottom-8 right-6 md:right-8 bg-brand-500 hover:bg-brand-600 text-white rounded-full px-5 md:px-6 py-3.5 md:py-4 apple-shadow-lg hover:scale-105 active:scale-95 transition-all z-40 flex items-center gap-3 group"
         aria-label="Submit Feedback"
         title="Submit Feedback"
       >
-        <MessageSquarePlus className="w-6 h-6 stroke-[2.5]" />
-        <span className="font-bold text-base tracking-tight">Feedback</span>
+        <MessageSquarePlus className="w-5 h-5 stroke-[2.5]" />
+        <span className="font-semibold text-sm md:text-base">Feedback</span>
       </button>
 
       <FeedbackModal 

@@ -97,25 +97,25 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-8 pb-32">
+    <div className="af-page">
       {/* Header */}
       <header className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b border-border-DEFAULT pb-8">
-          <div>
+        <div className="af-page-header items-start">
+          <div className="af-heading-group">
              <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><Compass className="w-6 h-6" /></div>
-                <h1 className="text-3xl font-bold text-slate-900">Demo Co-Pilot</h1>
+                <h1 className="af-page-title">Demo Co-Pilot</h1>
              </div>
-             <p className="text-slate-500 text-lg max-w-2xl leading-relaxed">
+             <p className="af-page-subtitle">
                Your interactive guide to a perfect, repeatable demonstration.
              </p>
           </div>
           <div className="flex gap-3 shrink-0">
-             <button onClick={handleExportScript} disabled={isDownloading} className="flex items-center gap-2 px-4 py-2 bg-white border border-border-DEFAULT rounded-lg text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors disabled:opacity-50">
+             <button onClick={handleExportScript} disabled={isDownloading} className="af-secondary-action disabled:opacity-50">
                 {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
                 {isDownloading ? 'Exporting...' : 'Export Script'}
              </button>
-             <button onClick={() => window.open('https://launchpad.arista.com', '_blank')} className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 transition-colors shadow-sm">
+             <button onClick={() => window.open('https://launchpad.arista.com', '_blank')} className="af-primary-action py-3">
                 <PlayCircle className="w-4 h-4" /> Launch Pod
              </button>
           </div>
@@ -123,10 +123,10 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
         <div className="flex flex-col md:flex-row gap-4 justify-between">
             {/* Role Toggle */}
             <div className="bg-surface p-2 rounded-xl border border-border-DEFAULT shadow-sm flex flex-wrap gap-2 max-w-xs">
-                <button onClick={() => setActiveRole('se')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeRole === 'se' ? 'bg-brand-600 text-white shadow-md' : 'text-text-secondary hover:bg-surface-highlight'}`}>
+                <button onClick={() => setActiveRole('se')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeRole === 'se' ? 'bg-brand-600 text-white shadow-md' : 'text-text-secondary hover:bg-surface-highlight'}`}>
                     <Wrench className="w-4 h-4" /> Systems Engineer
                 </button>
-                <button onClick={() => setActiveRole('am')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeRole === 'am' ? 'bg-brand-600 text-white shadow-md' : 'text-text-secondary hover:bg-surface-highlight'}`}>
+                <button onClick={() => setActiveRole('am')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeRole === 'am' ? 'bg-brand-600 text-white shadow-md' : 'text-text-secondary hover:bg-surface-highlight'}`}>
                     <Handshake className="w-4 h-4" /> Account Manager
                 </button>
             </div>
@@ -159,7 +159,7 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className={`font-bold transition-colors ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>{step.title}</h3>
+                    <h3 className={`font-semibold transition-colors ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>{step.title}</h3>
                     <p className="text-xs text-slate-500 mt-1">{step.duration}</p>
                   </div>
                   <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${isActive ? 'rotate-180 text-brand-500' : ''}`} />
@@ -168,14 +168,14 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isActive ? 'max-h-[800px]' : 'max-h-0'}`}>
                    <div className="px-6 pb-6 pt-2 space-y-6">
                       <div>
-                         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">What to Say (Narrative)</h4>
-                         <ul className="space-y-2 list-disc list-inside text-slate-600 text-sm marker:text-brand-500">
+                         <h4 className="af-meta text-slate-400 mb-3">What to Say (Narrative)</h4>
+                         <ul className="space-y-2 list-disc list-inside text-slate-600 text-sm leading-6 marker:text-brand-500">
                            {step.whatToSay.map((s, i) => <li key={i}>{s}</li>)}
                          </ul>
                       </div>
                       <div>
-                         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">What to Do (Actions)</h4>
-                         <ul className="space-y-2 list-disc list-inside text-slate-600 text-sm marker:text-indigo-500">
+                         <h4 className="af-meta text-slate-400 mb-3">What to Do (Actions)</h4>
+                         <ul className="space-y-2 list-disc list-inside text-slate-600 text-sm leading-6 marker:text-indigo-500">
                            {step.whatToDo.map((s, i) => <li key={i}>{s}</li>)}
                          </ul>
                       </div>
@@ -192,18 +192,18 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
             {activeStepData ? (
               <>
                 <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-200">
-                  <h4 className="font-bold text-indigo-900 mb-2 flex items-center gap-2"><Target className="w-4 h-4" /> Key Insight</h4>
-                  <p className="text-indigo-800 text-sm leading-relaxed font-medium">"{activeStepData.keyInsight}"</p>
+                  <h4 className="font-semibold text-indigo-900 mb-2 flex items-center gap-2"><Target className="w-4 h-4" /> Key Insight</h4>
+                  <p className="text-indigo-800 text-sm leading-6 font-normal">"{activeStepData.keyInsight}"</p>
                 </div>
                 {activeStepData.trap && (
                   <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200">
-                    <h4 className="font-bold text-amber-900 mb-2 flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> Trap to Avoid: {activeStepData.trap.title}</h4>
-                    <p className="text-amber-800 text-sm leading-relaxed">{activeStepData.trap.content}</p>
+                    <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> Trap to Avoid: {activeStepData.trap.title}</h4>
+                    <p className="text-amber-800 text-sm leading-6">{activeStepData.trap.content}</p>
                   </div>
                 )}
                 {activeStepData.relevantConcepts.length > 0 && (
                   <div className="bg-white rounded-2xl p-6 border border-border-DEFAULT shadow-sm">
-                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2"><BookOpen className="w-4 h-4" /> Relevant Concepts</h4>
+                    <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2"><BookOpen className="w-4 h-4" /> Relevant Concepts</h4>
                     <div className="space-y-2">
                       {activeStepData.relevantConcepts.map(concept => {
                         const lesson = lessons.find(l => l.id === concept.lessonId);

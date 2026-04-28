@@ -253,7 +253,7 @@ const HeroPage: React.FC<HeroPageProps> = ({ onEnter }) => {
             
             <button 
               onClick={onEnter}
-              className="px-16 py-6 bg-brand-500 text-white rounded-apple lg text-2xl font-black shadow-2xl shadow-brand-500/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 mx-auto group"
+              className="px-16 py-6 bg-brand-500 text-white rounded-apple text-2xl font-black shadow-2xl shadow-brand-500/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 mx-auto group"
             >
               Enter Academy
               <Lock className="w-6 h-6 text-white/50 group-hover:text-white transition-colors" />

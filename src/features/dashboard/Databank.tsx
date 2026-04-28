@@ -66,31 +66,31 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
   const relevantLesson = selectedTerm?.lessonId ? lessons.find(l => l.id === selectedTerm.lessonId) : null;
 
   const renderExpandableList = (items: typeof CHEATSHEETS) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {items.map(item => {
         const Icon = ICONS[item.icon] || BookText;
         const isExpanded = expandedItem === item.id;
         return (
-          <div key={item.id} className={`bg-surface rounded-apple-lg border border-border apple-shadow transition-all duration-500 overflow-hidden ${isExpanded ? 'md:col-span-2 scale-[1.02]' : 'hover:scale-[1.02]'}`}>
-            <button onClick={() => setExpandedItem(isExpanded ? null : item.id)} className="w-full p-10 text-left flex items-center gap-8 group">
-              <div className="p-5 bg-app text-brand-500 rounded-apple group-hover:bg-brand-500/10 transition-colors shadow-inner">
-                <Icon className="w-8 h-8 stroke-[2]" />
+          <div key={item.id} className={`af-card transition-all duration-500 overflow-hidden ${isExpanded ? 'md:col-span-2 scale-[1.01]' : 'hover:scale-[1.01]'}`}>
+            <button onClick={() => setExpandedItem(isExpanded ? null : item.id)} className="w-full text-left flex items-center gap-6 group">
+              <div className="p-4 bg-app text-brand-500 rounded-2xl group-hover:bg-brand-500/10 transition-colors shadow-inner">
+                <Icon className="w-7 h-7 stroke-[2]" />
               </div>
               <div className="flex-1">
-                <h3 className="font-extrabold text-text-primary text-2xl tracking-tight">{item.title}</h3>
-                <p className="text-base text-text-muted font-medium mt-1">{item.description}</p>
+                <h3 className="af-card-title">{item.title}</h3>
+                <p className="af-body-sm mt-1">{item.description}</p>
               </div>
               <ChevronsUpDown className={`w-6 h-6 text-text-muted transform transition-all duration-300 ${isExpanded ? 'rotate-180 text-brand-500 stroke-[2.5]' : 'stroke-[1.5]'}`} />
             </button>
             {isExpanded && (
-              <div className="px-10 pb-10 animate-fade-in">
-                <div className="bg-app/50 border border-border rounded-apple p-10 space-y-8">
+              <div className="pt-8 animate-fade-in">
+                <div className="af-panel space-y-8">
                   {item.content.map((section, idx) => (
                     <div key={idx}>
-                      <h4 className="font-bold text-text-primary text-xs uppercase tracking-widest mb-4 opacity-40">{section.title}</h4>
+                      <h4 className="af-eyebrow mb-4">{section.title}</h4>
                       <ul className="space-y-4">
                         {section.points.map((pt, pIdx) => (
-                          <li key={pIdx} className="flex items-start gap-4 text-text-secondary text-lg leading-relaxed font-medium">
+                          <li key={pIdx} className="flex items-start gap-4 af-body">
                             <div className="mt-2.5 w-2 h-2 rounded-full bg-brand-500 shrink-0 shadow-sm shadow-brand-500/40"></div>
                             {pt}
                           </li>
@@ -108,37 +108,37 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
   );
 
   return (
-    <div className="max-w-6xl mx-auto p-6 md:p-12 space-y-24 pb-40">
-      <header className="text-center space-y-8">
-        <div className="inline-flex items-center justify-center w-24 h-24 bg-surface text-brand-500 rounded-[32px] apple-shadow-lg border border-border">
-           <BookCopy className="w-12 h-12 stroke-[2.5]" />
+    <div className="af-page max-w-6xl">
+      <header className="text-center af-heading-group">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-surface text-brand-500 rounded-apple apple-shadow-lg border border-border mb-4">
+           <BookCopy className="w-10 h-10 stroke-[2.5]" />
         </div>
-        <div className="space-y-3">
-          <h1 className="text-6xl font-extrabold text-text-primary tracking-tight font-serif">Databank</h1>
-          <p className="text-text-muted text-2xl font-medium max-w-2xl mx-auto leading-relaxed font-serif">
+        <div className="space-y-2">
+          <h1 className="af-page-title">Databank</h1>
+          <p className="af-page-subtitle mx-auto">
             Your unified reference library and reasoning engine.
           </p>
         </div>
       </header>
 
       {/* Visual Glossary */}
-      <section className="space-y-10">
+      <section className="space-y-6">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><BrainCircuit className="w-8 h-8 stroke-[2]" /></div>
-          <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Visual Glossary</h2>
+          <div className="p-3 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><BrainCircuit className="w-7 h-7 stroke-[2]" /></div>
+          <h2 className="af-section-title">Visual Glossary</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 h-[800px] bg-surface rounded-apple-lg border border-border apple-shadow-lg p-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:h-[760px] bg-surface rounded-apple-lg border border-border apple-shadow-lg p-6 md:p-8">
             {/* Left Pane: Search & List */}
-            <div className="md:col-span-1 flex flex-col h-full overflow-hidden border-r border-border pr-8">
-                <div className="relative mb-8">
-                    <Search className="absolute left-5 top-4.5 w-6 h-6 text-text-muted stroke-[2]" />
+            <div className="md:col-span-1 flex flex-col h-full overflow-hidden md:border-r border-border md:pr-6">
+                <div className="relative mb-6">
+                    <Search className="absolute left-4 top-4 w-5 h-5 text-text-muted stroke-[2]" />
                     <input 
                         type="text"
                         aria-label="Search glossary terms"
                         placeholder="Search terms..."
                         value={glossarySearch}
                         onChange={e => setGlossarySearch(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4.5 bg-app border border-border rounded-apple text-lg text-text-primary placeholder:text-text-muted font-medium focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all"
+                        className="w-full pl-12 pr-5 py-3.5 bg-app border border-border rounded-2xl text-base text-text-primary placeholder:text-text-muted font-medium focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all"
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
@@ -146,7 +146,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                         <button 
                             key={term.term}
                             onClick={() => setSelectedTerm(term)}
-                            className={`w-full text-left px-6 py-5 rounded-apple text-lg font-bold transition-all duration-300 ${selectedTerm?.term === term.term ? 'bg-brand-500 text-white apple-shadow scale-[1.02]' : 'text-text-secondary hover:bg-app hover:text-text-primary'}`}
+                            className={`w-full text-left px-4 py-3.5 rounded-2xl text-base font-semibold transition-all duration-300 ${selectedTerm?.term === term.term ? 'bg-brand-500 text-white apple-shadow scale-[1.01]' : 'text-text-secondary hover:bg-app hover:text-text-primary'}`}
                         >
                             {term.term}
                         </button>
@@ -155,16 +155,16 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
             </div>
 
             {/* Right Pane: Concept Card */}
-            <div className="md:col-span-2 bg-app/30 rounded-[32px] p-12 overflow-y-auto custom-scrollbar">
+            <div className="md:col-span-2 bg-app/30 rounded-apple p-6 md:p-8 overflow-y-auto custom-scrollbar">
                 {selectedTerm ? (
-                    <div className="space-y-12 animate-fade-in">
-                        <div className="space-y-6">
-                          <h3 className="text-5xl font-extrabold text-text-primary tracking-tighter font-serif">{selectedTerm.term}</h3>
-                          <p className="text-text-secondary text-2xl leading-relaxed font-serif">{selectedTerm.definition}</p>
+                    <div className="space-y-8 animate-fade-in">
+                        <div className="space-y-4">
+                          <h3 className="text-3xl md:text-4xl font-bold text-text-primary leading-tight">{selectedTerm.term}</h3>
+                          <p className="text-text-secondary text-lg md:text-xl leading-8">{selectedTerm.definition}</p>
                         </div>
                         
                         {SelectedSim && (
-                            <div className="bg-surface rounded-apple-lg p-8 border border-border apple-shadow-lg">
+                            <div className="bg-surface rounded-apple p-6 border border-border apple-shadow-lg">
                                 <div className="aspect-video h-72 mx-auto">
                                     <div className="w-full h-full scale-[0.95] origin-center">
                                         <SimulationLoader 
@@ -178,17 +178,17 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                             </div>
                         )}
 
-                        <div className="p-10 bg-surface border border-border apple-shadow rounded-apple-lg">
-                            <div className="flex items-center gap-3 text-apple-orange font-bold text-xs uppercase tracking-widest mb-4">
+                        <div className="af-card">
+                            <div className="flex items-center gap-3 text-apple-orange af-eyebrow mb-4">
                                 <Info className="w-5 h-5 stroke-[2.5]" /> Common Misconception
                             </div>
-                            <p className="text-text-secondary text-xl leading-relaxed italic font-serif">
+                            <p className="text-text-secondary text-lg leading-8 italic">
                                 "{selectedTerm.misconception}"
                             </p>
                         </div>
                         
                         {relevantLesson && (
-                            <button onClick={() => onSelectLesson(relevantLesson)} className="w-full p-6 bg-brand-500 text-white font-bold text-xl rounded-apple apple-shadow hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4">
+                            <button onClick={() => onSelectLesson(relevantLesson)} className="w-full af-primary-action">
                                 <BookText className="w-7 h-7 stroke-[2.5]" />
                                 Go to Lesson: {relevantLesson.title}
                             </button>
@@ -197,7 +197,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-text-muted space-y-6">
                         <BookCopy className="w-20 h-20 opacity-10 stroke-[1.5]" />
-                        <p className="text-2xl font-bold tracking-tight">Select a term to explore</p>
+                        <p className="text-xl font-semibold">Select a term to explore</p>
                     </div>
                 )}
             </div>
@@ -205,15 +205,15 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       </section>
 
       {/* Comparison Engine */}
-      <section className="space-y-10">
+      <section className="space-y-6">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><GitCompare className="w-8 h-8 stroke-[2]" /></div>
-          <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Comparison Engine</h2>
+          <div className="p-3 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><GitCompare className="w-7 h-7 stroke-[2]" /></div>
+          <h2 className="af-section-title">Comparison Engine</h2>
         </div>
         <div className="bg-surface rounded-apple-lg border border-border apple-shadow-lg overflow-hidden">
-          <div className="p-12 flex flex-col md:flex-row items-center justify-center gap-10 border-b border-border bg-app/30">
+          <div className="p-6 md:p-8 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 border-b border-border bg-app/30">
             <div className="relative w-full md:w-80">
-              <select aria-label="First comparison item" value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select aria-label="First comparison item" value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-surface border border-border rounded-2xl p-4 font-semibold text-base text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />
@@ -222,7 +222,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
               <GitCompare className="w-8 h-8 text-brand-500 stroke-[2.5]" />
             </div>
             <div className="relative w-full md:w-80">
-              <select aria-label="Second comparison item" value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select aria-label="Second comparison item" value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-surface border border-border rounded-2xl p-4 font-semibold text-base text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />
@@ -235,10 +235,10 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
               const isDifferent = valA !== valB;
 
               return (
-              <div key={key} className="grid grid-cols-12 p-8 text-lg items-center hover:bg-app transition-colors">
-                <div className="col-span-12 md:col-span-3 text-text-muted font-bold uppercase text-xs tracking-widest mb-3 md:mb-0 opacity-60">{key}</div>
-                <div className="col-span-6 md:col-span-4 text-text-primary font-bold text-center md:text-left">{valA}</div>
-                <div className={`col-span-6 md:col-span-5 text-text-primary font-extrabold text-center md:text-left ${isDifferent ? 'text-brand-500' : ''}`}>{valB}</div>
+              <div key={key} className="grid grid-cols-12 p-5 md:p-6 text-base items-center hover:bg-app transition-colors">
+                <div className="col-span-12 md:col-span-3 af-meta mb-3 md:mb-0 opacity-70">{key}</div>
+                <div className="col-span-6 md:col-span-4 text-text-primary font-semibold text-center md:text-left">{valA}</div>
+                <div className={`col-span-6 md:col-span-5 text-text-primary font-bold text-center md:text-left ${isDifferent ? 'text-brand-500' : ''}`}>{valB}</div>
               </div>
             )})}
           </div>
@@ -246,19 +246,19 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
       </section>
 
       {/* Vertical Playbooks */}
-      <section className="space-y-10">
+      <section className="space-y-6">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Briefcase className="w-8 h-8 stroke-[2]" /></div>
-          <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Vertical Playbooks</h2>
+          <div className="p-3 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Briefcase className="w-7 h-7 stroke-[2]" /></div>
+          <h2 className="af-section-title">Vertical Playbooks</h2>
         </div>
         {renderExpandableList(playbooks)}
       </section>
 
       {/* Curated Cheatsheets */}
-      <section className="space-y-10">
+      <section className="space-y-6">
         <div className="flex items-center gap-5">
-          <div className="p-4 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Check className="w-8 h-8 stroke-[2.5]" /></div>
-          <h2 className="text-4xl font-extrabold text-text-primary tracking-tight">Curated Cheatsheets</h2>
+          <div className="p-3 bg-surface apple-shadow rounded-2xl text-brand-500 border border-border"><Check className="w-7 h-7 stroke-[2.5]" /></div>
+          <h2 className="af-section-title">Curated Cheatsheets</h2>
         </div>
         {renderExpandableList(regularCheatsheets)}
       </section>
