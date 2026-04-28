@@ -27,3 +27,23 @@ test('core pages have no serious or critical axe violations', async ({ page }) =
     await checkA11y(label, page);
   }
 });
+
+test('lesson briefing view has no serious or critical axe violations', async ({ page }) => {
+  await enterAcademy(page);
+
+  await page.getByRole('button', { name: 'Airframe Academy', exact: true }).click();
+
+  // Open the first available lesson
+  await page.getByRole('button', { name: /the decibel code/i }).first().click();
+
+  // BriefingView is active by default
+  await expect(page.getByRole('button', { name: /initialize lab/i })).toBeVisible();
+  await checkA11y('LessonView/briefing', page);
+});
+
+test('Demo Co-Pilot view has no serious or critical axe violations', async ({ page }) => {
+  await enterAcademy(page);
+
+  await page.getByRole('button', { name: 'Demo Co-Pilot', exact: true }).click();
+  await checkA11y('DemoCopilot', page);
+});

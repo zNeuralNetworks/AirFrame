@@ -168,11 +168,18 @@ const LessonView: React.FC<LessonViewProps> = ({ lessonId, onBack, onComplete })
         <button onClick={onBack} className="p-2 hover:bg-surface-highlight rounded-full transition-colors group">
           <ChevronLeft className="w-6 h-6 text-text-muted group-hover:text-text-primary" />
         </button>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-0.5">
-             <span className="px-2 py-0.5 rounded text-2xs font-bold uppercase bg-slate-100 text-text-muted tracking-wide border border-border-DEFAULT">{lesson.category}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <button
+              onClick={onBack}
+              className="text-2xs font-bold text-brand-500 hover:text-brand-600 hover:underline transition-colors shrink-0"
+            >
+              {lesson.category}
+            </button>
+            <span className="text-2xs text-text-muted">›</span>
+            <span className="text-2xs font-bold text-text-muted truncate">{lesson.title}</span>
           </div>
-          <h2 className="text-lg font-bold text-text-primary leading-none">{lesson.title}</h2>
+          <h2 className="text-lg font-bold text-text-primary leading-none truncate">{lesson.title}</h2>
         </div>
         
         <div className="hidden md:flex gap-1 bg-white p-1 rounded-full border border-border apple-shadow">

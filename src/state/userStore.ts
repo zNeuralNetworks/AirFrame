@@ -63,7 +63,7 @@ const initialProgress = () => {
   };
 };
 
-const mergeProgress = (local: UserProgress, remote?: Partial<UserProgress> | null): UserProgress => {
+export const mergeProgress = (local: UserProgress, remote?: Partial<UserProgress> | null): UserProgress => {
   if (!remote) return local;
 
   const completedLessonIds = Array.from(new Set([

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calculator, CheckCircle2, RefreshCw, ArrowRight } from 'lucide-react';
 import ObservationBlock from '../../shared/ui/ObservationBlock';
+import { applyDb, isLevelComplete } from './dbGameLogic';
 
 interface DbGameProps {
   onComplete: () => void;
@@ -23,7 +24,7 @@ const DbGame: React.FC<DbGameProps> = ({ onComplete }) => {
   const currentLevel = LEVELS[level];
 
   useEffect(() => {
-    if (Math.abs(currentMw - currentLevel.targetMw) < 0.1) {
+    if (isLevelComplete(currentMw, currentLevel.targetMw)) {
       setShowSuccess(true);
       setTimeout(() => {
         if (level < LEVELS.length - 1) {
@@ -42,16 +43,9 @@ const DbGame: React.FC<DbGameProps> = ({ onComplete }) => {
     setCurrentMw(LEVELS[level].startMw);
   }, [level]);
 
-  const applyDb = (db: number) => {
-    let newMw = currentMw;
+  const handleApplyDb = (db: number) => {
     const label = db > 0 ? `+${db} dB` : `${db} dB`;
-    
-    if (db === 3) newMw = currentMw * 2;
-    if (db === -3) newMw = currentMw / 2;
-    if (db === 10) newMw = currentMw * 10;
-    if (db === -10) newMw = currentMw / 10;
-
-    setCurrentMw(newMw);
+    setCurrentMw(applyDb(currentMw, db));
     setHistory([...history, label]);
   };
 
@@ -109,19 +103,19 @@ const DbGame: React.FC<DbGameProps> = ({ onComplete }) => {
          </div>
       ) : (
          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button onClick={() => applyDb(3)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
+            <button onClick={() => handleApplyDb(3)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
                +3 dB
                <div className="text-[10px] text-slate-400 font-normal">Double (x2)</div>
             </button>
-            <button onClick={() => applyDb(-3)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
+            <button onClick={() => handleApplyDb(-3)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
                -3 dB
                <div className="text-[10px] text-slate-400 font-normal">Halve (/2)</div>
             </button>
-            <button onClick={() => applyDb(10)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
+            <button onClick={() => handleApplyDb(10)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
                +10 dB
                <div className="text-[10px] text-slate-400 font-normal">Tenfold (x10)</div>
             </button>
-            <button onClick={() => applyDb(-10)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
+            <button onClick={() => handleApplyDb(-10)} className="bg-white hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 p-4 rounded-xl font-bold text-lg transition-all border border-slate-100 shadow-sm text-slate-700">
                -10 dB
                <div className="text-[10px] text-slate-400 font-normal">Tenth (/10)</div>
             </button>

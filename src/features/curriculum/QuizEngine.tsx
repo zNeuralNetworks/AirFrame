@@ -3,6 +3,7 @@ import React from 'react';
 import { Question } from '../../types';
 import { Info, CheckCircle, XCircle, ArrowRight, Award } from 'lucide-react';
 import Mascot from '../../shared/ui/Mascot';
+import { hasPassed } from './quizLogic';
 
 interface QuizEngineProps {
   questions: Question[];
@@ -32,7 +33,7 @@ const QuizEngine: React.FC<QuizEngineProps> = ({
   onFinalCompletion
 }) => {
   const currentQuestion = questions[currentQuestionIndex];
-  const passed = score >= questions.length / 2;
+  const passed = hasPassed(score, questions.length);
 
   if (showSummary) {
     return (

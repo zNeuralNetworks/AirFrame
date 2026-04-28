@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+
+declare const __APP_VERSION__: string;
 import { Trash2, Shield, Monitor, Save, AlertCircle, LogOut, LogIn, User, Sun } from 'lucide-react';
 import { useUserStore, useUserActions } from '../../state/userStore';
 import ThemeToggle from '../../shared/ui/layout/ThemeToggle';
@@ -128,7 +130,7 @@ const Settings: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <div className="p-6 rounded-2xl bg-app border border-border flex items-center justify-between">
                 <span className="text-base font-bold text-text-muted uppercase tracking-widest">Version</span>
-                <span className="text-sm font-mono font-bold text-text-primary">v2.4.0</span>
+                <span className="text-sm font-mono font-bold text-text-primary">v{__APP_VERSION__}</span>
              </div>
              <div className="p-6 rounded-2xl bg-app border border-border flex items-center justify-between">
                 <span className="text-base font-bold text-text-muted uppercase tracking-widest">Build Target</span>

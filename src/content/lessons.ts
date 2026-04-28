@@ -58,6 +58,13 @@ Once you think in dB, this stops being mysterious and becomes predictable.
         options: ['It reduces slightly (97%)', 'It is cut in half (50%)', 'It divides by 10 (10%)', 'It stays the same'],
         correctIndex: 1,
         explanation: 'dB is logarithmic. -3dB represents a halving of the physical energy.'
+      },
+      {
+        id: '1.1q2',
+        text: 'An AP transmits at 100 mW. After applying +10 dB then -3 dB, what is the final power?',
+        options: ['500 mW', '1000 mW', '50 mW', '200 mW'],
+        correctIndex: 0,
+        explanation: '+10 dB multiplies by 10 (100 mW → 1000 mW). -3 dB halves the result (1000 mW → 500 mW). Applying the Rule of 3s and 10s in sequence gives 500 mW.'
       }
     ]
   },

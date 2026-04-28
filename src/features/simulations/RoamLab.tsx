@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Smartphone, Wifi, Settings, ArrowLeftRight } from 'lucide-react';
 import ObservationBlock from '../../shared/ui/ObservationBlock';
+import { calcRssiA, calcRssiB, shouldRoam } from './roamLabLogic';
 
 interface RoamLabProps {
   onComplete: () => void;
@@ -13,20 +14,12 @@ const RoamLab: React.FC<RoamLabProps> = ({ onComplete }) => {
   const [roamThreshold, setRoamThreshold] = useState(-80); // Default sticky
 
   // Calculate RSSI based on position
-  const rssiA = Math.round(-30 - (clientPos * 0.6));
-  const rssiB = Math.round(-30 - ((100 - clientPos) * 0.6));
+  const rssiA = calcRssiA(clientPos);
+  const rssiB = calcRssiB(clientPos);
 
   useEffect(() => {
-    // Roaming Logic Simulation
-    if (connectedAp === 'A') {
-       if (rssiA < roamThreshold && rssiB > rssiA + 5) {
-          setConnectedAp('B');
-       }
-    } else {
-       if (rssiB < roamThreshold && rssiA > rssiB + 5) {
-          setConnectedAp('A');
-       }
-    }
+    const next = shouldRoam(connectedAp, rssiA, rssiB, roamThreshold);
+    if (next !== connectedAp) setConnectedAp(next);
   }, [clientPos, roamThreshold, rssiA, rssiB, connectedAp]);
 
   useEffect(() => {

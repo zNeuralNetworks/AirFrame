@@ -56,6 +56,36 @@ describe('content integrity', () => {
     }
   });
 
+  it('every non-assessment lesson has at least 1 quiz question', () => {
+    for (const lesson of INITIAL_LESSONS) {
+      if (lesson.id.endsWith('assessment')) continue;
+      expect(
+        lesson.quiz.length,
+        `${lesson.id} must have at least 1 quiz question for hasPassed to be meaningful`
+      ).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('every lesson with a simulation has a positive xpReward', () => {
+    for (const lesson of INITIAL_LESSONS) {
+      if (!lesson.simulationId) continue;
+      expect(
+        lesson.xpReward,
+        `${lesson.id} has simulationId but xpReward is 0`
+      ).toBeGreaterThan(0);
+    }
+  });
+
+  it('every simulationId referenced in lessons exists in the registry', () => {
+    for (const lesson of INITIAL_LESSONS) {
+      if (!lesson.simulationId) continue;
+      expect(
+        simulationRegistry,
+        `lesson ${lesson.id} references unregistered simulationId "${lesson.simulationId}"`
+      ).toHaveProperty(lesson.simulationId);
+    }
+  });
+
   it('keeps modules and glossary pointing to real lessons', () => {
     const lessonIds = new Set(INITIAL_LESSONS.map((lesson) => lesson.id));
 
