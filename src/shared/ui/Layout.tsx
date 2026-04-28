@@ -48,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
-    <div className="flex h-screen h-[100dvh] bg-app text-text-primary overflow-hidden font-sans transition-colors duration-300">
+    <div data-galen-app-shell className="flex h-screen h-[100dvh] bg-app text-text-primary overflow-hidden font-sans transition-colors duration-300">
       <style>{`
         @media print {
           @page { margin: 1.5cm; size: auto; }
@@ -82,7 +82,7 @@ const Layout: React.FC<LayoutProps> = ({
         onChangeView={onChangeView}
       />
 
-      <main id="print-area" className="flex-1 flex flex-col min-h-0 relative h-full pb-20 md:pb-0 bg-app transition-colors duration-300">
+      <main id="print-area" data-galen-main className="flex-1 flex flex-col min-h-0 relative h-full pb-20 md:pb-0 bg-app transition-colors duration-300">
         <MobileTopBar title={title} onExitApp={onExitApp} />
         
         <div className="w-full flex-1 min-h-0 overflow-y-auto safe-scroll">

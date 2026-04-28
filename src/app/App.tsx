@@ -6,11 +6,17 @@ import HeroPage from '../features/landing/HeroPage';
 import { useUserStore } from '../state/userStore';
 
 const ADMIN_EMAIL = 'tinurajan1@gmail.com';
+const isE2EAuthEnabled = import.meta.env.VITE_AIRFRAME_E2E_AUTH === '1';
 
 type AppMode = 'landing' | 'launcher' | 'airframe' | 'design';
 
 function App() {
-  const [mode, setMode] = useState<AppMode>('landing');
+  const [mode, setMode] = useState<AppMode>(() => {
+    if (isE2EAuthEnabled && new URLSearchParams(window.location.search).has('galenView')) {
+      return 'airframe';
+    }
+    return 'landing';
+  });
   const currentUser = useUserStore(state => state.currentUser);
   const email = currentUser?.email?.toLowerCase() || '';
   const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');

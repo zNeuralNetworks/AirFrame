@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');
 
   return (
-    <aside className="hidden md:flex flex-col w-64 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
+    <aside data-galen-sidebar className="hidden md:flex flex-col w-64 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
       <div className="px-5 py-4 flex items-center gap-4">
         <div className="bg-brand-500 p-2 rounded-xl transition-all shadow-lg shadow-brand-500/20">
           <Radio className="text-white w-6 h-6" />

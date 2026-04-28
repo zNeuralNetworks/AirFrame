@@ -49,10 +49,33 @@ interface AcademyAppProps {
 }
 
 const ADMIN_EMAIL = "tinurajan1@gmail.com";
+const isE2EAuthEnabled = import.meta.env.VITE_AIRFRAME_E2E_AUTH === '1';
+const GALEN_VIEWS = new Set([
+  'dashboard',
+  'learn',
+  'databank',
+  'refresher',
+  'demo-copilot',
+  'scorecard',
+  'settings',
+  'cms',
+]);
+
+const getInitialView = () => {
+  if (!isE2EAuthEnabled) return 'dashboard';
+  const view = new URLSearchParams(window.location.search).get('galenView');
+  return view && GALEN_VIEWS.has(view) ? view : 'dashboard';
+};
+
+const wrapGalenPage = (id: string, content: React.ReactNode) => (
+  <div data-galen-page={id} className="min-h-full">
+    {content}
+  </div>
+);
 
 const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
   // --- State ---
-  const [view, setView] = useState('dashboard');
+  const [view, setView] = useState(getInitialView);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [initialDatabankTerm, setInitialDatabankTerm] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -67,6 +90,23 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
 
   // --- Effects ---
   useEffect(() => {
+    if (isE2EAuthEnabled) {
+      useUserStore.setState((state) => ({
+        isAuthReady: true,
+        isLoading: false,
+        currentUser: {
+          id: 'e2e-user',
+          uid: 'e2e-user',
+          email: 'e2e@arista.com'
+        },
+        user: {
+          ...state.user,
+          isApproved: true
+        }
+      }));
+      return;
+    }
+
     const initApp = async () => {
       const { auth, onAuthStateChanged } = await import('../lib/firebase');
       
@@ -97,7 +137,7 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
     };
 
     initApp();
-  }, []);
+  }, [loadGlossary, loadLessons, syncProgress]);
 
   useEffect(() => {
     const email = currentUser?.email?.toLowerCase() || '';
@@ -205,16 +245,16 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
     }
 
     if (!currentUser) {
-      return <AuthWall />;
+      return wrapGalenPage('auth', <AuthWall />);
     }
 
     switch (view) {
       case 'dashboard':
-        return <Dashboard onContinue={() => setView('learn')} />;
+        return wrapGalenPage('dashboard', <Dashboard onContinue={() => setView('learn')} />);
       case 'learn':
-        return <CourseMap lessons={mainLessons} onSelectLesson={handleSelectLesson} />;
+        return wrapGalenPage('learn', <CourseMap lessons={mainLessons} onSelectLesson={handleSelectLesson} />);
       case 'lesson':
-        return selectedLesson ? (
+        return wrapGalenPage('lesson', selectedLesson ? (
           <LessonView 
             lessonId={selectedLesson.id} 
             onBack={handleBackFromLesson}
@@ -222,9 +262,9 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
           />
         ) : (
           <div className="p-10 text-center text-slate-500">Lesson not found</div>
-        );
+        ));
       case 'databank':
-        return (
+        return wrapGalenPage('databank', (
           <Databank 
             lessons={mainLessons} 
             glossary={glossary}
@@ -232,19 +272,19 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
             initialTerm={initialDatabankTerm}
             onClearInitialTerm={() => setInitialDatabankTerm(null)}
           />
-        );
+        ));
       case 'refresher':
-        return <QuickRefresher />;
+        return wrapGalenPage('refresher', <QuickRefresher />);
       case 'demo-copilot':
-        return <DemoCopilot lessons={mainLessons} onSelectLesson={handleSelectLesson} />;
+        return wrapGalenPage('demo-copilot', <DemoCopilot lessons={mainLessons} onSelectLesson={handleSelectLesson} />);
       case 'scorecard':
-        return <DemoScorecard />;
+        return wrapGalenPage('scorecard', <DemoScorecard />);
       case 'settings':
-        return <Settings />;
+        return wrapGalenPage('settings', <Settings />);
       case 'cms':
-        return isAdmin ? <CMSDashboard /> : <Dashboard onContinue={() => setView('learn')} />;
+        return wrapGalenPage('cms', isAdmin ? <CMSDashboard /> : <Dashboard onContinue={() => setView('learn')} />);
       default:
-        return <Dashboard onContinue={() => setView('learn')} />;
+        return wrapGalenPage('dashboard', <Dashboard onContinue={() => setView('learn')} />);
     }
   };
 

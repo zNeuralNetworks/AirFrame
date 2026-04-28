@@ -5,13 +5,13 @@ import { INITIAL_LESSONS } from '../content/lessons';
 import { GLOSSARY } from '../content/glossary';
 import { MOCK_USER } from '../content/user';
 
-interface UserInfo {
+export interface UserInfo {
   id: string;
   email: string;
   uid?: string;
 }
 
-interface UserState {
+export interface UserState {
   lessons: Lesson[];
   glossary: GlossaryTerm[];
   user: UserProgress;
@@ -95,6 +95,40 @@ const mergeProgress = (local: UserProgress, remote?: Partial<UserProgress> | nul
     quizHistory: uniqueQuizHistory,
     achievements: Array.from(achievementMap.values()),
     isApproved: local.isApproved || remote.isApproved
+  };
+};
+
+export const mergePersistedUserState = (
+  persistedState: unknown,
+  currentState: UserState
+): UserState => {
+  const persisted = persistedState as Partial<Pick<UserState, 'lessons' | 'user' | 'currentUser'>>;
+  const mergedLessons = INITIAL_LESSONS.map(initLesson => {
+    const savedLesson = persisted.lessons?.find((l: Partial<Lesson>) => l.id === initLesson.id);
+    if (savedLesson) {
+      return {
+        ...initLesson,
+        completed: savedLesson.completed || false,
+        simCompleted: savedLesson.simCompleted || false,
+        // Force unlock if the source content says it's unlocked, otherwise honor saved state
+        locked: initLesson.locked === false ? false : (savedLesson.locked !== undefined ? savedLesson.locked : initLesson.locked),
+      };
+    }
+    return initLesson;
+  });
+
+  const mergedUser = {
+    ...MOCK_USER,
+    ...(persisted.user || {}),
+    quizHistory: persisted.user?.quizHistory || [],
+    achievements: persisted.user?.achievements || []
+  };
+  
+  return {
+    ...currentState,
+    currentUser: persisted.currentUser || null,
+    lessons: mergedLessons,
+    user: mergedUser,
   };
 };
 
@@ -445,36 +479,7 @@ export const useUserStore = create<UserState>()(
         })),
         user: state.user
       }),
-      merge: (persistedState, currentState) => {
-        const persisted = persistedState as Partial<Pick<UserState, 'lessons' | 'user' | 'currentUser'>>;
-        const mergedLessons = INITIAL_LESSONS.map(initLesson => {
-          const savedLesson = persisted.lessons?.find((l: Partial<Lesson>) => l.id === initLesson.id);
-          if (savedLesson) {
-            return {
-              ...initLesson,
-              completed: savedLesson.completed || false,
-              simCompleted: savedLesson.simCompleted || false,
-              // Force unlock if the source content says it's unlocked, otherwise honor saved state
-              locked: initLesson.locked === false ? false : (savedLesson.locked !== undefined ? savedLesson.locked : initLesson.locked),
-            };
-          }
-          return initLesson;
-        });
-
-        const mergedUser = {
-          ...MOCK_USER,
-          ...(persisted.user || {}),
-          quizHistory: persisted.user?.quizHistory || [],
-          achievements: persisted.user?.achievements || []
-        };
-        
-        return {
-          ...currentState,
-          currentUser: persisted.currentUser || null,
-          lessons: mergedLessons,
-          user: mergedUser,
-        };
-      },
+      merge: mergePersistedUserState,
     }
   )
 );

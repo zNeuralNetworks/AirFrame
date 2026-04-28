@@ -134,6 +134,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                     <Search className="absolute left-5 top-4.5 w-6 h-6 text-text-muted stroke-[2]" />
                     <input 
                         type="text"
+                        aria-label="Search glossary terms"
                         placeholder="Search terms..."
                         value={glossarySearch}
                         onChange={e => setGlossarySearch(e.target.value)}
@@ -212,7 +213,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
         <div className="bg-surface rounded-apple-lg border border-border apple-shadow-lg overflow-hidden">
           <div className="p-12 flex flex-col md:flex-row items-center justify-center gap-10 border-b border-border bg-app/30">
             <div className="relative w-full md:w-80">
-              <select value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select aria-label="First comparison item" value={compareA} onChange={e => setCompareA(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />
@@ -221,7 +222,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
               <GitCompare className="w-8 h-8 text-brand-500 stroke-[2.5]" />
             </div>
             <div className="relative w-full md:w-80">
-              <select value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
+              <select aria-label="Second comparison item" value={compareB} onChange={e => setCompareB(e.target.value)} className="w-full bg-surface border border-border rounded-apple p-5 font-bold text-xl text-text-primary focus:ring-4 focus:ring-brand-500/10 focus:outline-none apple-shadow appearance-none cursor-pointer">
                 {comparisonOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
               <ChevronsUpDown className="absolute right-5 top-5.5 w-6 h-6 text-text-muted pointer-events-none stroke-[2]" />

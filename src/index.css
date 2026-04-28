@@ -14,19 +14,19 @@
   --color-border-highlight: rgba(0, 0, 0, 0.1);
   --color-text-primary: #1C1C1E;
   --color-text-secondary: #3A3A3C;
-  --color-text-muted: #8E8E93;
+  --color-text-muted: #5F6368;
 
   /* Arista Brand Colors */
   --color-brand-50: #F0F9FF;
   --color-brand-400: #60A5FA;
-  --color-brand-500: #007AFF; /* SF Blue */
-  --color-brand-600: #0062CC;
-  --color-brand-700: #0051A8;
+  --color-brand-500: #0062CC;
+  --color-brand-600: #0051A8;
+  --color-brand-700: #003F82;
   
   /* Accent Colors */
-  --color-apple-orange: #FF9500;
-  --color-apple-green: #34C759;
-  --color-apple-red: #FF3B30;
+  --color-apple-orange: #9A5B00;
+  --color-apple-green: #248A3D;
+  --color-apple-red: #D70015;
   --color-apple-indigo: #5856D6;
 
   /* Custom Radii */
@@ -43,7 +43,7 @@
     --color-border-highlight: rgba(0, 0, 0, 0.1);
     --color-text-primary: #1C1C1E;
     --color-text-secondary: #3A3A3C;
-    --color-text-muted: #8E8E93;
+    --color-text-muted: #5F6368;
     --color-text-tertiary: #AEAEB2;
   }
 
@@ -127,7 +127,7 @@
     --color-border-highlight: rgba(0, 0, 0, 0.1);
     --color-text-primary: #1C1C1E;
     --color-text-secondary: #3A3A3C;
-    --color-text-muted: #8E8E93;
+    --color-text-muted: #5F6368;
     --color-text-tertiary: #AEAEB2;
     color-scheme: light;
   }
