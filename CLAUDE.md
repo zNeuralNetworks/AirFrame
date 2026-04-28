@@ -32,7 +32,7 @@ Fall back to Grep/Glob/Read **only** when the graph doesn't cover what you need.
 
 ### Workflow
 
-1. The graph auto-updates on file changes (via hooks).
+1. **Worktree warning**: the graph lives at the main repo root. If `list_graph_stats` returns 0 nodes, call `build_or_update_graph_tool` with `repo_root="/Users/theorajan/local builds/airframe"` (or run a full rebuild once).
 2. Use `detect_changes` for code review.
 3. Use `get_affected_flows` to understand impact.
 4. Use `query_graph` pattern="tests_for" to check coverage.
@@ -57,18 +57,24 @@ High-value entry points:
 - `src/lib/firebase.ts`: Firebase initialization, auth exports, Firestore error payloads, boot-time connection check.
 - `server.ts`, `server/db.ts`: local Express API, JWT auth, lowdb persistence, Vite dev middleware.
 
-Current architecture shape from the graph:
-- Largest community is `src/features`, especially curriculum, simulations, dashboard, CMS, demo, and design-system components.
-- `src/app` is a thin shell that calls into features and shared layout.
-- Shared UI lives under `src/shared/ui`; layout and search couple into many feature surfaces.
-- Services and state are small but high-impact because lesson/progress/auth flows depend on them.
-- Graph warnings show high coupling between app/layout/services and the feature-heavy simulation/curriculum area. Treat changes to `AcademyApp`, `Layout`, `LessonView`, `userStore`, `contentService`, and registries as wider blast-radius changes.
+Current architecture shape from the graph (621 nodes, 3533 edges, 33 communities, 0 coupling warnings — rebuilt 2026-04-28):
+- Largest community: `app-handle` (36 nodes) — AcademyApp, App, Layout, Sidebar, CourseMap, DemoScorecard, DemoCopilot, auth components.
+- Second: `design-system-doc` (32 nodes) — Assessment, QuizEngine, Dashboard, design-system docs, DbGame, RoamLab.
+- Third: `curriculum-handle` (24 nodes) — LessonView, LabManager, SimulationRegistry, SimulationErrorBoundary, SimulationLoader, telemetry.
+- Fourth: `cms-handle` (12 nodes) — CMSDashboard and subcomponents.
+- Fifth: `services-fs` (11 nodes) — ContentService (Firestore + static fallback).
+- 9 cross-community edges; key paths: `AcademyApp.renderContent` → Dashboard/LessonView/Databank/CMS, and LessonView/Assessment → `useUserActions`.
+- Treat changes to `AcademyApp`, `Layout`, `LessonView`, `userStore`, `contentService`, and registries as wider blast-radius changes.
 
 Development commands:
 - `npm run dev`: starts `tsx server.ts` on port 3000 with Vite middleware.
 - `npm run build`: production Vite build.
-- `npm run lint`: runs `tsc --noEmit`; this is the main type/check command.
-- README references `npm run test`, but `package.json` currently has no `test` script.
+- `npm run lint`: runs `tsc --noEmit`; main type/correctness gate.
+- `npm test`: full test suite.
+- `npm run test:unit`: Vitest unit tests (content integrity, progress persistence).
+- `npm run test:components`: component tests (CourseMap, SearchBar, QuizEngine).
+- `npm run test:e2e`: Playwright E2E (smoke, progress, accessibility) — set `VITE_AIRFRAME_E2E_AUTH=1` for auth bypass.
+- `npm run test:layout`: Galen layout tests — requires Java 17+ locally; CI uses Temurin 17.
 
 Important invariants:
 - Add a simulation by updating `SimulationType` in `src/types.ts`, adding/lazy-registering the component in `SimulationRegistry.ts`, adding a `LAB_SPECS` entry in `src/content/labs.ts`, and assigning `simulationId` from lesson content.
@@ -84,3 +90,4 @@ Known caveats:
 - `docs/TECHNICAL_DESIGN.md` says simulations are managed through `VisualRegistry`; the active simulation registry is `src/features/simulations/SimulationRegistry.ts`. `VisualRegistry` is for curriculum visuals.
 - `vite.config.ts` sets Vite server port 3000, while `server.ts` also listens on 3000 and embeds Vite middleware. Prefer `npm run dev` rather than raw `vite`.
 - The code-review graph `get_hub_nodes` and `get_bridge_nodes` calls may fail with `'str' object has no attribute 'resolve'`; `get_architecture_overview` works.
+- Graph is empty (0 nodes) inside git worktrees — always pass `repo_root="/Users/theorajan/local builds/airframe"` to graph tools, or trigger a rebuild with that path.
