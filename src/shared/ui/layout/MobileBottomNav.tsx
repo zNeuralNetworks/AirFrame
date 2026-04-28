@@ -16,8 +16,13 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ navItems, currentView
           <button
             key={item.id}
             onClick={() => onChangeView(item.id)}
-            className={`flex flex-col items-center gap-1 min-w-[68px] transition-all duration-300 ${isActive ? 'text-brand-500' : 'text-text-muted'}`}
+            className={`relative flex min-w-[68px] flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-brand-500' : 'text-text-muted'}`}
           >
+            {item.badge && (
+              <span className="absolute -top-1 right-1 rounded-full border border-amber-300/70 bg-amber-50 px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-amber-700 shadow-sm">
+                {item.badge}
+              </span>
+            )}
             <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
             <span className={`text-[10px] font-semibold uppercase tracking-wide leading-tight ${isActive ? 'opacity-100' : 'opacity-70'}`}>{item.label}</span>
           </button>

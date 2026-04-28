@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { 
   CheckSquare, 
-  PlayCircle, 
   MonitorPlay, 
   Shield, 
   FileText, 
@@ -27,7 +26,6 @@ const DemoRoadmap: React.FC = () => {
   const [selectedTrackId, setSelectedTrackId] = useState<number>(0);
   const [activeStep, setActiveStep] = useState<number | null>(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isLaunching, setIsLaunching] = useState(false);
 
   const checklist = [
     "Clean Browser State (Incognito)",
@@ -228,14 +226,6 @@ const DemoRoadmap: React.FC = () => {
     }, 1500);
   };
 
-  const handleLaunchPod = () => {
-      setIsLaunching(true);
-      setTimeout(() => {
-          setIsLaunching(false);
-          window.open('https://launchpad.arista.com', '_blank'); 
-      }, 2000);
-  };
-
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 pb-40">
       
@@ -259,14 +249,6 @@ const DemoRoadmap: React.FC = () => {
            >
               {isDownloading ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileText className="w-3 h-3" />}
               {isDownloading ? 'EXPORTING...' : 'EXPORT SCRIPT'}
-           </button>
-           <button 
-             onClick={handleLaunchPod}
-             disabled={isLaunching}
-             className="flex items-center gap-2 px-4 py-1.5 bg-brand-600 text-white rounded-lg text-xs font-bold hover:bg-brand-700 transition-all shadow-md disabled:opacity-70 animate-pulse-slow"
-           >
-              {isLaunching ? <Loader2 className="w-3 h-3 animate-spin" /> : <PlayCircle className="w-3 h-3" />}
-              {isLaunching ? 'PROVISIONING...' : 'LAUNCH POD'}
            </button>
         </div>
       </div>

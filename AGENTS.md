@@ -20,6 +20,14 @@ Start here for Codex work in this repo. Keep token use low: use the graph first,
 6. `npm test` exists and runs lint, unit, component, and Playwright E2E tests. Prefer narrower scripts first when only one layer changed.
 7. If graph freshness matters after edits, run `code-review-graph update --repo /Users/theorajan/local\ builds/airframe` or full `code-review-graph build --repo /Users/theorajan/local\ builds/airframe`.
 
+## Token-Efficient Operation
+
+- Default to `max_output_tokens` caps on noisy commands; raise only after a failure needs full detail.
+- Prefer `git status --short`, `git diff --stat`, `git diff --name-only`, targeted `sed`, and `rg -n` over full-file dumps.
+- Never inspect tracked worktree/cache blobs such as `.claude/worktrees/*` with `git show` unless the task is explicitly about those files.
+- Run focused validation first, then the full suite once before commit/push.
+- Summarize command results in responses instead of replaying logs.
+
 ## Response Footer
 
 - End completed responses with a concise token-usage line when the runtime exposes exact counts.
