@@ -11,6 +11,51 @@ interface AuthModalProps {
 
 type Step = 'auth' | 'username';
 
+const firebaseCode = (error: unknown) => {
+  if (typeof error !== 'object' || error === null) return '';
+  return 'code' in error && typeof error.code === 'string' ? error.code : '';
+};
+
+const errorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'object' && error !== null && 'message' in error && typeof error.message === 'string') {
+    return error.message;
+  }
+  return '';
+};
+
+const authErrorMessage = (error: unknown, fallback: string) => {
+  const code = firebaseCode(error);
+  const message = errorMessage(error);
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : 'this domain';
+
+  if (code === 'auth/unauthorized-domain' || /unauthorized.*domain/i.test(message)) {
+    return `This domain is not authorized for sign-in. Add "${hostname}" to Firebase Authentication authorized domains and confirm VITE_FIREBASE_AUTH_DOMAIN matches the deployed app domain.`;
+  }
+
+  if (['auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found', 'auth/invalid-email'].includes(code)) {
+    return 'Email or password is incorrect. Check the account details and try again.';
+  }
+
+  if (['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(code)) {
+    return 'Google sign-in was canceled before it completed.';
+  }
+
+  if (code === 'auth/network-request-failed' || /network|timeout|offline/i.test(message)) {
+    return 'Sign-in could not reach Firebase. Check the network connection and try again.';
+  }
+
+  if (code === 'auth/email-already-in-use') {
+    return 'An account already exists for this email. Sign in instead.';
+  }
+
+  if (code === 'auth/weak-password') {
+    return 'Use a stronger password with at least 6 characters.';
+  }
+
+  return fallback;
+};
+
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [step, setStep] = useState<Step>('auth');
@@ -40,8 +85,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         await actions.register(email, password);
         setStep('username');
       }
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+    } catch (err) {
+      setError(authErrorMessage(err, 'Authentication failed. Try again or contact the Airframe admin.'));
     }
   };
 
@@ -55,8 +100,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       } else {
         handleClose();
       }
-    } catch (e: any) {
-      setError(e.message || 'Google login failed');
+    } catch (e) {
+      setError(authErrorMessage(e, 'Google sign-in failed. Try again or use email sign-in.'));
     }
   };
 
@@ -96,6 +141,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             {step === 'auth' && (
               <button
                 onClick={handleClose}
+                aria-label="Close sign-in dialog"
                 className="absolute top-6 right-6 p-2 text-text-muted hover:text-text-primary hover:bg-app rounded-xl transition-all"
               >
                 <X className="w-5 h-5" />
@@ -155,6 +201,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
+                      role="alert"
                       className="p-3 bg-apple-red/10 border border-apple-red/20 text-apple-red text-sm rounded-xl font-medium"
                     >
                       {error}
@@ -244,6 +291,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
+                      role="alert"
                       className="p-3 bg-apple-red/10 border border-apple-red/20 text-apple-red text-sm rounded-xl font-medium"
                     >
                       {error}

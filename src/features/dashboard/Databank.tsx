@@ -146,7 +146,7 @@ const Databank: React.FC<DatabankProps> = ({ lessons, glossary, onSelectLesson, 
                         <button 
                             key={term.term}
                             onClick={() => setSelectedTerm(term)}
-                            className={`w-full text-left px-4 py-3.5 rounded-2xl text-base font-semibold transition-all duration-300 ${selectedTerm?.term === term.term ? 'bg-brand-600 text-white apple-shadow scale-[1.01]' : 'text-text-secondary hover:bg-app hover:text-text-primary'}`}
+                            className={`w-full text-left px-4 py-3.5 rounded-2xl text-base font-semibold ${selectedTerm?.term === term.term ? 'bg-[#0057B8] text-white apple-shadow' : 'text-text-secondary hover:bg-app hover:text-text-primary'}`}
                         >
                             {term.term}
                         </button>
