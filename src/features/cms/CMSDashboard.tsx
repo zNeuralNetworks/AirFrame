@@ -18,6 +18,17 @@ import { CMSContentForm } from './components/CMSContentForm';
 
 type ContentType = 'lessons' | 'glossary' | 'feedback' | 'insights' | 'users';
 
+const emptyUserProgress = () => ({
+  totalXp: 0,
+  streakDays: 0,
+  level: 1,
+  completedLessonIds: [],
+  quizHistory: [],
+  achievements: [],
+  isApproved: false,
+  updatedAt: new Date().toISOString(),
+});
+
 const CMSDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ContentType>('lessons');
   const [items, setItems] = useState<any[]>([]);
@@ -25,6 +36,7 @@ const CMSDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [confirmResetId, setConfirmResetId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchItems();
@@ -108,6 +120,21 @@ const CMSDashboard: React.FC = () => {
       fetchItems();
     } catch (error) {
       console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleUserReset = async (uid: string) => {
+    if (confirmResetId !== uid) {
+      setConfirmResetId(uid);
+      setTimeout(() => setConfirmResetId(null), 4000);
+      return;
+    }
+    try {
+      await setDoc(doc(db, 'users', uid), emptyUserProgress(), { merge: false });
+      setConfirmResetId(null);
+      fetchItems();
+    } catch (error) {
+      console.error("Error resetting user:", error);
     }
   };
 
@@ -253,11 +280,15 @@ const CMSDashboard: React.FC = () => {
                   ) : activeTab === 'users' ? (
                     <div className="space-y-6">
                       <p className="text-sm text-text-muted leading-relaxed">View detailed analytics for this user. You can reset their progress if they request a fresh start (caution: irreversible).</p>
-                      <button 
-                         className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border border-border text-text-primary rounded-2xl font-bold hover:bg-app transition-all"
-                         onClick={() => alert("User reset logic not yet implemented via CMS")}
+                      <button
+                         className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${
+                           confirmResetId === editingItem?.firestoreId
+                             ? 'bg-apple-red text-white'
+                             : 'bg-white border border-border text-text-primary hover:bg-red-50 hover:border-apple-red hover:text-apple-red'
+                         }`}
+                         onClick={() => editingItem?.firestoreId && handleUserReset(editingItem.firestoreId)}
                       >
-                        Reset Application Progress
+                        {confirmResetId === editingItem?.firestoreId ? 'Confirm Reset? (click again)' : 'Reset Application Progress'}
                       </button>
                     </div>
                   ) : activeTab === 'insights' ? (

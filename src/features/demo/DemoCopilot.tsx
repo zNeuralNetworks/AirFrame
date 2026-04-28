@@ -53,6 +53,38 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
     );
   };
 
+  const handleExportScript = () => {
+    if (!currentTrack) return;
+    setIsDownloading(true);
+    const lines: string[] = [
+      `DEMO SCRIPT: ${currentTrack.title}`,
+      `Audience: ${currentTrack.audience} | Focus: ${currentTrack.focus}`,
+      '='.repeat(60),
+      '',
+    ];
+    currentTrack.steps.forEach((step, idx) => {
+      lines.push(`STEP ${idx + 1}: ${step.title} (${step.duration})`);
+      lines.push('-'.repeat(40));
+      lines.push('WHAT TO SAY:');
+      step.whatToSay.forEach(s => lines.push(`  • ${s}`));
+      lines.push('');
+      lines.push('WHAT TO DO:');
+      step.whatToDo.forEach(s => lines.push(`  • ${s}`));
+      lines.push('');
+      lines.push(`KEY INSIGHT: ${step.keyInsight}`);
+      if (step.trap) lines.push(`TRAP TO AVOID (${step.trap.title}): ${step.trap.content}`);
+      lines.push('');
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentTrack.title.replace(/\s+/g, '-').toLowerCase()}-script.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setIsDownloading(false);
+  };
+
   const handleSelectTrack = (trackId: number) => {
     setSelectedTrackId(trackId);
     const newTrack = DEMO_TRACKS.find(t => t.id === trackId);
@@ -79,8 +111,9 @@ const DemoCopilot: React.FC<DemoCopilotProps> = ({ lessons, onSelectLesson }) =>
              </p>
           </div>
           <div className="flex gap-3 shrink-0">
-             <button disabled className="flex items-center gap-2 px-4 py-2 bg-white border border-border-DEFAULT rounded-lg text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors disabled:opacity-50">
-                <FileText className="w-4 h-4" /> Export Script
+             <button onClick={handleExportScript} disabled={isDownloading} className="flex items-center gap-2 px-4 py-2 bg-white border border-border-DEFAULT rounded-lg text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors disabled:opacity-50">
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+                {isDownloading ? 'Exporting...' : 'Export Script'}
              </button>
              <button onClick={() => window.open('https://launchpad.arista.com', '_blank')} className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 transition-colors shadow-sm">
                 <PlayCircle className="w-4 h-4" /> Launch Pod

@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Trash2, Shield, Monitor, Save, AlertCircle, LogOut, LogIn, User } from 'lucide-react';
+import { Trash2, Shield, Monitor, Save, AlertCircle, LogOut, LogIn, User, Sun } from 'lucide-react';
 import { useUserStore, useUserActions } from '../../state/userStore';
+import ThemeToggle from '../../shared/ui/layout/ThemeToggle';
 
 const Settings: React.FC = () => {
   const [confirmReset, setConfirmReset] = useState(false);
@@ -96,6 +97,23 @@ const Settings: React.FC = () => {
               {confirmReset ? <AlertCircle className="w-6 h-6 stroke-[2.5]" /> : <Trash2 className="w-6 h-6 stroke-[2]" />}
               {confirmReset ? 'Confirm Wipe' : 'Reset Data'}
             </button>
+          </div>
+        </div>
+
+        {/* Appearance */}
+        <div className="bg-surface rounded-[32px] border border-border p-10 apple-shadow-lg">
+          <h3 className="text-xl font-extrabold text-text-primary mb-8 flex items-center gap-4 tracking-tight">
+            <div className="p-2 bg-brand-500/10 rounded-lg">
+              <Sun className="w-6 h-6 text-brand-500 stroke-[2.5]" />
+            </div>
+            Appearance
+          </h3>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xl font-extrabold text-text-primary tracking-tight">Theme</div>
+              <p className="text-lg text-text-muted mt-2 font-medium leading-relaxed">Switch between light and dark mode.</p>
+            </div>
+            <ThemeToggle showLabel />
           </div>
         </div>
 

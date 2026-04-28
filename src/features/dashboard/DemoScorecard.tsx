@@ -38,30 +38,32 @@ const CRITERIA = [
   }
 ];
 
+const SCORECARD_KEY = 'airframe_scorecard_v1';
+
+const calcTotal = (scores: Record<string, number>) => {
+  let total = 0;
+  CRITERIA.forEach(cat => cat.items.forEach(item => { total += (scores[item.id] || 0) * item.weight; }));
+  return total;
+};
+
 const DemoScorecard: React.FC = () => {
-  const [scores, setScores] = useState<Record<string, number>>({});
-  const [totalScore, setTotalScore] = useState(0);
+  const [scores, setScores] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(localStorage.getItem(SCORECARD_KEY) || '{}'); } catch { return {}; }
+  });
   const [maxScore, setMaxScore] = useState(0);
 
   useEffect(() => {
     let max = 0;
-    CRITERIA.forEach(cat => cat.items.forEach(item => max += (item.weight * 2))); // Max rating is 2
+    CRITERIA.forEach(cat => cat.items.forEach(item => max += (item.weight * 2)));
     setMaxScore(max);
   }, []);
+
+  const totalScore = calcTotal(scores);
 
   const handleScore = (id: string, rating: number) => {
     const newScores = { ...scores, [id]: rating };
     setScores(newScores);
-    
-    // Calc total
-    let currentTotal = 0;
-    CRITERIA.forEach(cat => {
-      cat.items.forEach(item => {
-        const val = newScores[item.id] || 0;
-        currentTotal += (val * item.weight);
-      });
-    });
-    setTotalScore(currentTotal);
+    localStorage.setItem(SCORECARD_KEY, JSON.stringify(newScores));
   };
 
   const getRatingColor = (percentage: number) => {
@@ -97,8 +99,8 @@ const DemoScorecard: React.FC = () => {
         </div>
 
         <div className="flex gap-4 items-center">
-           <button 
-             onClick={() => setScores({})}
+           <button
+             onClick={() => { setScores({}); localStorage.removeItem(SCORECARD_KEY); }}
              className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-text-primary font-medium transition-colors"
            >
               <RefreshCw className="w-4 h-4" /> Reset

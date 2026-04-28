@@ -103,7 +103,12 @@ const LabManager: React.FC<LabManagerProps> = ({
                       className="w-full text-sm p-3 bg-surface border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-500 text-text-primary min-h-[80px]"
                     />
                     <div className="flex justify-end mt-1">
-                      {savedReflection && <span className="text-2xs text-success font-bold flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Saved</span>}
+                      {savedReflection
+                        ? <span className="text-2xs text-success font-bold flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Saved</span>
+                        : reflectionText
+                          ? <span className="text-2xs text-text-muted">Auto-saves on blur...</span>
+                          : null
+                      }
                     </div>
                   </div>
                 )}

@@ -93,6 +93,23 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <p className="text-sm font-bold text-text-primary truncate">{currentUser.email}</p>
               </div>
             </div>
+            {/* XP progress bar */}
+            {(() => {
+              const xpInLevel = user.totalXp % 500;
+              const pct = Math.round((xpInLevel / 500) * 100);
+              return (
+                <div className="mt-2 space-y-1">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-text-muted">
+                    <span>Lv {user.level} · {user.completedLessonIds.length} lessons</span>
+                    <span>{user.totalXp} XP</span>
+                  </div>
+                  <div className="h-1.5 bg-app rounded-full overflow-hidden">
+                    <div className="h-full bg-brand-500 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+                  </div>
+                  <p className="text-[9px] text-text-muted text-right">{500 - xpInLevel} XP to Lv {user.level + 1}</p>
+                </div>
+              );
+            })()}
             <button
               onClick={() => actions.logout()}
               className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-apple-red hover:bg-apple-red/10 rounded-lg transition-all text-xs font-bold uppercase"
