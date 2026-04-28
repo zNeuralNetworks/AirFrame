@@ -50,32 +50,11 @@ interface AcademyAppProps {
 
 const ADMIN_EMAIL = "tinurajan1@gmail.com";
 const isE2EAuthEnabled = import.meta.env.VITE_AIRFRAME_E2E_AUTH === '1';
-const GALEN_VIEWS = new Set([
-  'dashboard',
-  'learn',
-  'databank',
-  'refresher',
-  'demo-copilot',
-  'scorecard',
-  'settings',
-  'cms',
-]);
-
-const getInitialView = () => {
-  if (!isE2EAuthEnabled) return 'dashboard';
-  const view = new URLSearchParams(window.location.search).get('galenView');
-  return view && GALEN_VIEWS.has(view) ? view : 'dashboard';
-};
-
-const wrapGalenPage = (id: string, content: React.ReactNode) => (
-  <div data-galen-page={id} className="min-h-full">
-    {content}
-  </div>
-);
+type AcademyView = 'dashboard' | 'learn' | 'lesson' | 'databank' | 'refresher' | 'demo-copilot' | 'scorecard' | 'settings' | 'cms';
 
 const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
   // --- State ---
-  const [view, setView] = useState(getInitialView);
+  const [view, setView] = useState<AcademyView>('dashboard');
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [initialDatabankTerm, setInitialDatabankTerm] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -245,16 +224,16 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
     }
 
     if (!currentUser) {
-      return wrapGalenPage('auth', <AuthWall />);
+      return <AuthWall />;
     }
 
     switch (view) {
       case 'dashboard':
-        return wrapGalenPage('dashboard', <Dashboard onContinue={() => setView('learn')} />);
+        return <Dashboard onContinue={() => setView('learn')} />;
       case 'learn':
-        return wrapGalenPage('learn', <CourseMap lessons={mainLessons} onSelectLesson={handleSelectLesson} />);
+        return <CourseMap lessons={mainLessons} onSelectLesson={handleSelectLesson} />;
       case 'lesson':
-        return wrapGalenPage('lesson', selectedLesson ? (
+        return selectedLesson ? (
           <LessonView 
             lessonId={selectedLesson.id} 
             onBack={handleBackFromLesson}
@@ -262,9 +241,9 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
           />
         ) : (
           <div className="p-10 text-center text-slate-500">Lesson not found</div>
-        ));
+        );
       case 'databank':
-        return wrapGalenPage('databank', (
+        return (
           <Databank 
             lessons={mainLessons} 
             glossary={glossary}
@@ -272,28 +251,28 @@ const AcademyApp: React.FC<AcademyAppProps> = ({ onExit }) => {
             initialTerm={initialDatabankTerm}
             onClearInitialTerm={() => setInitialDatabankTerm(null)}
           />
-        ));
+        );
       case 'refresher':
-        return wrapGalenPage('refresher', <QuickRefresher />);
+        return <QuickRefresher />;
       case 'demo-copilot':
-        return wrapGalenPage('demo-copilot', <DemoCopilot lessons={mainLessons} onSelectLesson={handleSelectLesson} />);
+        return <DemoCopilot lessons={mainLessons} onSelectLesson={handleSelectLesson} />;
       case 'scorecard':
-        return wrapGalenPage('scorecard', <DemoScorecard />);
+        return <DemoScorecard />;
       case 'settings':
-        return wrapGalenPage('settings', <Settings />);
+        return <Settings />;
       case 'cms':
-        return wrapGalenPage('cms', isAdmin ? <CMSDashboard /> : <Dashboard onContinue={() => setView('learn')} />);
+        return isAdmin ? <CMSDashboard /> : <Dashboard onContinue={() => setView('learn')} />;
       default:
-        return wrapGalenPage('dashboard', <Dashboard onContinue={() => setView('learn')} />);
+        return <Dashboard onContinue={() => setView('learn')} />;
     }
   };
 
-  const activeNavId = view === 'lesson' ? 'learn' : view;
+  const activeNavId: AcademyView = view === 'lesson' ? 'learn' : view;
 
   return (
-    <Layout 
+      <Layout 
       currentView={activeNavId} 
-      onChangeView={(v) => { setView(v); setSelectedLesson(null); }}
+      onChangeView={(v) => { setView(v as AcademyView); setSelectedLesson(null); }}
       navItems={navItems}
       title="Airframe"
       onExitApp={onExit}

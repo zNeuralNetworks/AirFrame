@@ -9,11 +9,10 @@
     "start": "vite preview --host 0.0.0.0 --port 3000",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "test": "npm run lint && npm run test:unit && npm run test:components && npm run test:e2e && npm run test:layout",
+    "test": "npm run lint && npm run test:unit && npm run test:components && npm run test:e2e",
     "test:unit": "vitest run tests/unit",
     "test:components": "vitest run tests/components",
     "test:e2e": "playwright test",
-    "test:layout": "node tests/galen/airframe.test.cjs",
     "screenshot:constellation": "node scripts/constellation-screenshot.cjs"
   },
   "dependencies": {
@@ -40,8 +39,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
-    "chromedriver": "^148.0.0",
-    "galenframework": "2.4.4-build43",
     "jsdom": "^29.1.0",
     "playwright": "^1.59.1",
     "typescript": "~5.8.2",

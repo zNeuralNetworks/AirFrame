@@ -9,7 +9,7 @@ interface MobileBottomNavProps {
 
 const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ navItems, currentView, onChangeView }) => {
   return (
-    <div data-galen-mobile-nav className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-border z-50 flex justify-around px-3 py-2.5 pb-safe overflow-x-auto no-print">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-border z-50 flex justify-around px-3 py-2.5 pb-safe overflow-x-auto no-print">
       {navItems.map((item) => {
         const isActive = currentView === item.id;
         return (

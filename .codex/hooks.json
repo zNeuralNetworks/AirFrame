@@ -1,0 +1,47 @@
+{
+  "description": "Airframe project guardrails for graph-first exploration, UI/content verification, and destructive command protection.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .codex/hooks/airframe_session_context.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|exec_command|functions.exec_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .codex/hooks/airframe_command_guard.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|apply_patch|functions.apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .codex/hooks/airframe_post_edit_reminder.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .codex/hooks/airframe_stop_reminder.py"
+          }
+        ]
+      }
+    ]
+  }
+}

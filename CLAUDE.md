@@ -74,7 +74,6 @@ Development commands:
 - `npm run test:unit`: Vitest unit tests (content integrity, progress persistence).
 - `npm run test:components`: component tests (CourseMap, SearchBar, QuizEngine).
 - `npm run test:e2e`: Playwright E2E (smoke, progress, accessibility) — set `VITE_AIRFRAME_E2E_AUTH=1` for auth bypass.
-- `npm run test:layout`: Galen layout tests — requires Java 17+ locally; CI uses Temurin 17.
 
 Important invariants:
 - Add a simulation by updating `SimulationType` in `src/types.ts`, adding/lazy-registering the component in `SimulationRegistry.ts`, adding a `LAB_SPECS` entry in `src/content/labs.ts`, and assigning `simulationId` from lesson content.

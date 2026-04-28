@@ -15,7 +15,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, onExitApp }) => {
   const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');
 
   return (
-    <div data-galen-mobile-top className="md:hidden px-4 py-3 glass sticky top-0 z-40 flex items-center justify-between no-print">
+    <div className="md:hidden px-4 py-3 glass sticky top-0 z-40 flex items-center justify-between no-print">
       <div className="font-bold text-text-primary">{title}</div>
       <div className="flex gap-3 items-center">
         <ThemeToggle className="p-2 rounded-full bg-app/50 border border-border" />
