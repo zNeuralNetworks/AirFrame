@@ -8,7 +8,8 @@
 - Keep future UI work aligned with the existing Apple-inspired, light, minimal visual language in `src/index.css` and `src/shared/ui`.
 - For Arista/networking content, prioritize platform-accurate wording and realistic enterprise wireless/campus examples.
 - Prefer feature-based placement under `src/features` and reusable primitives under `src/shared/ui`.
-- Use `npm run lint` for type checking. Do not assume a test runner exists until one is added to `package.json`.
+- Use `npm run lint` for type checking. `npm test` exists and chains lint, Vitest unit tests, Vitest component tests, and Playwright E2E.
+- Completed responses should include exact token usage when available; otherwise state `Token usage: unavailable in this runtime`.
 - Firebase Auth and Firestore are the only backend. Do not reintroduce `/api/*`, JWT auth, Express, or lowdb.
 - Cloud Run deployment uses `Dockerfile`, `nginx.conf`, and `cloudbuild.yaml` to serve the static Vite build on port 8080.
 - `npm run build` runs Vite and copies root-level `corgimascot-*.png` files into `dist/`.
@@ -21,7 +22,7 @@
 - Firebase config is loaded from `firebase-applet-config.json`.
 - `npm run dev` runs Vite directly on port 3000.
 - README and docs contain some older structure references; current source already uses `src/app`, `src/features`, `src/shared`, `src/content`, `src/state`, and `src/services`.
-- The local code-review graph was rebuilt on 2026-04-21. `.code-review-graph/` is gitignored, so future clones/sessions may need a local rebuild.
+- The local code-review graph status on 2026-04-28 reports 150 files, 538 nodes, and 3572 edges on branch `main` at commit `8c9e05bb76d0`. `.code-review-graph/` is gitignored, so future clones/sessions may need a local rebuild.
 
 ## Avoid Re-Reading Unless Needed
 
@@ -31,6 +32,6 @@
 
 ## Open Follow-Ups
 
-- Add a real test script and targeted coverage for simulation math/state if requested.
+- Add or extend targeted coverage for simulation math/state when changing those areas.
 - Clean up stale docs that still mention older paths, React 18, or the wrong simulation registry.
 - Consider extracting auth/admin policy from `AcademyApp` and `userStore` if authorization grows beyond the current email-domain gate.

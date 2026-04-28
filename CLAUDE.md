@@ -45,19 +45,19 @@ Primary stack:
 - React 19, TypeScript 5.8, Vite 8, Tailwind CSS 4.2.
 - Zustand 5 with `persist` for local-first progress state.
 - Firebase Auth/Firestore for identity, feedback, cloud progress, lessons, and glossary overrides.
-- Express 5 + Vite middleware + lowdb as a legacy/local API fallback.
+- No local API backend is present; do not reintroduce `/api/*`, JWT auth, Express, or lowdb.
 
 High-value entry points:
-- `src/app/App.tsx`: top-level mode switch for landing, academy, demo, design system, and launcher.
+- `src/app/App.tsx`: top-level mode switch for landing, launcher, academy, and design system.
 - `src/app/AcademyApp.tsx`: main screen router, navigation, search index, admin CMS gate, demo filtering.
 - `src/state/userStore.ts`: source of truth for lessons, glossary, progress, auth state, Firebase/API sync, XP, achievements, quiz history, reflections.
 - `src/features/curriculum/LessonView.tsx`: lesson loop orchestrator for briefing, simulation/lab, quiz/assessment, glossary drawer, telemetry.
 - `src/features/simulations/SimulationRegistry.ts`: lazy simulation registry keyed by `SimulationType`.
 - `src/content/lessons.ts`, `src/content/modules.ts`, `src/content/labs.ts`, `src/content/glossary.ts`: content-as-code core.
 - `src/lib/firebase.ts`: Firebase initialization, auth exports, Firestore error payloads, boot-time connection check.
-- `server.ts`, `server/db.ts`: local Express API, JWT auth, lowdb persistence, Vite dev middleware.
+- `vite.config.ts`: Vite dev server configuration; port 3000, host `0.0.0.0`.
 
-Current architecture shape from the graph (621 nodes, 3533 edges, 33 communities, 0 coupling warnings — rebuilt 2026-04-28):
+Current architecture shape from the graph (CLI status on 2026-04-28: 150 files, 538 nodes, 3572 edges):
 - Largest community: `app-handle` (36 nodes) — AcademyApp, App, Layout, Sidebar, CourseMap, DemoScorecard, DemoCopilot, auth components.
 - Second: `design-system-doc` (32 nodes) — Assessment, QuizEngine, Dashboard, design-system docs, DbGame, RoamLab.
 - Third: `curriculum-handle` (24 nodes) — LessonView, LabManager, SimulationRegistry, SimulationErrorBoundary, SimulationLoader, telemetry.
@@ -67,7 +67,7 @@ Current architecture shape from the graph (621 nodes, 3533 edges, 33 communities
 - Treat changes to `AcademyApp`, `Layout`, `LessonView`, `userStore`, `contentService`, and registries as wider blast-radius changes.
 
 Development commands:
-- `npm run dev`: starts `tsx server.ts` on port 3000 with Vite middleware.
+- `npm run dev`: starts Vite on port 3000.
 - `npm run build`: production Vite build.
 - `npm run lint`: runs `tsc --noEmit`; main type/correctness gate.
 - `npm test`: full test suite.
@@ -78,7 +78,7 @@ Development commands:
 Important invariants:
 - Add a simulation by updating `SimulationType` in `src/types.ts`, adding/lazy-registering the component in `SimulationRegistry.ts`, adding a `LAB_SPECS` entry in `src/content/labs.ts`, and assigning `simulationId` from lesson content.
 - Preserve local-first progress merge behavior in `userStore`; persisted progress is intentionally merged onto static `INITIAL_LESSONS` so new lessons can appear without wiping completion state.
-- Demo mode only exposes `DEMO_LESSON_IDS` from `AcademyApp`.
+- The standalone Quick Demo app mode has been removed; do not reintroduce `demoMode` routing or `DEMO_LESSON_IDS`.
 - Admin CMS access is email gated by `tinurajan1@gmail.com` or `@arista.com`.
 - Firestore lessons/glossary override static content when present; static content remains the fallback.
 - Quiz access is blocked until the lab is complete when a lesson has a simulation.
@@ -87,6 +87,6 @@ Important invariants:
 Known caveats:
 - Docs mention some historical names and React 18, but package metadata uses React 19 and current source uses the feature-based `src/features` structure.
 - `docs/TECHNICAL_DESIGN.md` says simulations are managed through `VisualRegistry`; the active simulation registry is `src/features/simulations/SimulationRegistry.ts`. `VisualRegistry` is for curriculum visuals.
-- `vite.config.ts` sets Vite server port 3000, while `server.ts` also listens on 3000 and embeds Vite middleware. Prefer `npm run dev` rather than raw `vite`.
+- `vite.config.ts` sets Vite server port 3000. `package.json` runs Vite directly for development.
 - The code-review graph `get_hub_nodes` and `get_bridge_nodes` calls may fail with `'str' object has no attribute 'resolve'`; `get_architecture_overview` works.
 - Graph is empty (0 nodes) inside git worktrees — always pass `repo_root="/Users/theorajan/local builds/airframe"` to graph tools, or trigger a rebuild with that path.
