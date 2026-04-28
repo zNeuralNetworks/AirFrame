@@ -40,6 +40,7 @@ export interface UserState {
 
 const REFLECTIONS_KEY = 'airframe_reflections_v1';
 const ADMIN_EMAIL = 'tinurajan1@gmail.com';
+const isE2EAuthEnabled = import.meta.env.VITE_AIRFRAME_E2E_AUTH === '1';
 
 const isAuthorized = (email: string | null | undefined) => {
   if (!email) return false;
@@ -294,6 +295,8 @@ export const useUserStore = create<UserState>()(
           set({ isLoading: false });
         },
         saveToFirebase: async (progress: UserProgress) => {
+          if (isE2EAuthEnabled) return;
+
           const { currentUser } = get();
           if (currentUser?.uid) {
             try {

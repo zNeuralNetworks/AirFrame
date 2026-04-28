@@ -67,7 +67,18 @@ This creates the production `dist/` bundle and copies root-level mascot PNG asse
 npm run preview
 ```
 
-No `npm test` script is currently defined.
+### Tests
+
+```bash
+npm run lint
+npm run build
+npm test
+npm run test:unit
+npm run test:components
+npm run test:e2e
+```
+
+The E2E suite starts Vite with `VITE_AIRFRAME_E2E_AUTH=1` through `playwright.config.ts`. That mode injects a deterministic approved learner account so tests can exercise the authenticated Academy flow without live Firebase credentials.
 
 ### Browser Screenshot Check
 
@@ -177,6 +188,15 @@ Firestore is used for:
 - Glossary overrides
 
 See `docs/FIREBASE_SETUP.md` for setup details.
+
+### Firebase Auth Deploy Validation
+
+Production sign-in depends on Firebase Auth domain alignment:
+
+1. Set `VITE_FIREBASE_AUTH_DOMAIN` to the public app domain when deploying behind Cloud Run, a custom domain, or another hosted origin. For local development, the bundled Firebase config can be used.
+2. In Firebase Console, open Authentication -> Settings -> Authorized domains and add every domain that serves Airframe, including the Cloud Run default domain and any custom domain.
+3. After deploy, validate email/password sign-in, Google popup sign-in, sign-out, reload persistence, and progress sync from the deployed URL.
+4. If Google sign-in reports an unauthorized domain, confirm the browser hostname exactly matches an authorized Firebase domain and the deployed bundle was built with the intended `VITE_FIREBASE_AUTH_DOMAIN`.
 
 ## Deploy To Google Cloud Run
 
