@@ -1,5 +1,5 @@
-import React from 'react';
-import { Radio, ArrowLeft, Printer, User, LogOut, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Radio, ArrowLeft, Printer, User, LogOut, ShieldCheck, MoreHorizontal } from 'lucide-react';
 import { NavItem, SearchableItem } from '../Layout';
 import SearchBar from './SearchBar';
 import ThemeToggle from './ThemeToggle';
@@ -31,8 +31,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSearchResultClick
 }) => {
   const { currentUser, actions, user } = useUserStore();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const email = currentUser?.email?.toLowerCase() || '';
   const isAdmin = email === ADMIN_EMAIL || email.endsWith('@arista.com');
+  const xpInLevel = user.totalXp % 500;
+  const xpProgressPct = Math.round((xpInLevel / 500) * 100);
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-surface-sidebar backdrop-blur-2xl border-r border-border no-print z-20 transition-all duration-500">
@@ -73,18 +76,24 @@ const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      <div className="p-4 border-t border-border space-y-2">
+      <div className="p-3 border-t border-border space-y-1.5">
         {currentUser ? (
-          <div className="flex flex-col gap-2 p-4 bg-surface rounded-2xl border border-border/50">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-brand-500/10 text-brand-600 rounded-xl flex items-center justify-center">
+          <div className="relative rounded-xl border border-border/60 bg-surface/70 px-3 py-2.5">
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setIsUserMenuOpen((open) => !open)}
+                className="w-9 h-9 shrink-0 bg-brand-500/10 text-brand-600 rounded-xl flex items-center justify-center hover:bg-brand-500/15 transition-colors"
+                aria-label="Open learner menu"
+                aria-expanded={isUserMenuOpen}
+              >
                 <User className="w-4 h-4" />
-              </div>
+              </button>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <p className="af-meta text-brand-600 mb-0.5">{user.username || 'Learner'}</p>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-brand-600 truncate">{user.username || 'Learner'}</p>
                   {user.isApproved && (
-                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[10px] font-semibold uppercase border border-brand-500/20">
+                    <div className="flex shrink-0 items-center gap-0.5 px-1.5 py-0.5 bg-brand-500/10 text-brand-600 rounded text-[10px] font-semibold uppercase border border-brand-500/20">
                       <ShieldCheck className="w-2.5 h-2.5" />
                       Arista
                     </div>
@@ -92,30 +101,41 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
                 <p className="text-sm font-semibold text-text-primary truncate">{currentUser.email}</p>
               </div>
+              <button
+                type="button"
+                onClick={() => setIsUserMenuOpen((open) => !open)}
+                className="w-8 h-8 shrink-0 rounded-lg text-text-muted hover:text-text-primary hover:bg-app flex items-center justify-center transition-colors"
+                aria-label="Learner actions"
+                aria-expanded={isUserMenuOpen}
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            {/* XP progress bar */}
-            {(() => {
-              const xpInLevel = user.totalXp % 500;
-              const pct = Math.round((xpInLevel / 500) * 100);
-              return (
-                <div className="mt-2 space-y-1">
-                  <div className="flex items-center justify-between text-[10px] font-bold text-text-muted">
-                    <span>Lv {user.level} · {user.completedLessonIds.length} lessons</span>
-                    <span>{user.totalXp} XP</span>
-                  </div>
-                  <div className="h-1.5 bg-app rounded-full overflow-hidden">
-                    <div className="h-full bg-brand-500 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
-                  </div>
-                  <p className="text-[9px] text-text-muted text-right">{500 - xpInLevel} XP to Lv {user.level + 1}</p>
-                </div>
-              );
-            })()}
-            <button
-              onClick={() => actions.logout()}
-              className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-apple-red hover:bg-apple-red/10 rounded-lg transition-all text-xs font-semibold uppercase tracking-wide"
-            >
-              <LogOut className="w-3.5 h-3.5" /> Sign Out
-            </button>
+
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center justify-between text-[10px] font-bold text-text-muted">
+                <span>Lv {user.level} · {user.completedLessonIds.length} lessons</span>
+                <span>{user.totalXp} XP</span>
+              </div>
+              <div className="h-1 bg-app rounded-full overflow-hidden">
+                <div className="h-full bg-brand-500 rounded-full transition-all duration-500" style={{ width: `${xpProgressPct}%` }} />
+              </div>
+            </div>
+
+            {isUserMenuOpen && (
+              <div className="absolute left-3 right-3 bottom-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-xl border border-border bg-surface apple-shadow">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsUserMenuOpen(false);
+                    actions.logout();
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-apple-red hover:bg-apple-red/10 transition-colors text-sm font-semibold"
+                >
+                  <LogOut className="w-4 h-4" /> Sign out
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <button

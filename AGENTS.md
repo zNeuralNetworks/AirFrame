@@ -17,8 +17,13 @@ Start here for Codex work in this repo. Keep token use low: use the graph first,
 3. Prefer existing patterns in `src/features`, `src/shared/ui`, `src/content`, `src/state`, and `src/services`.
 4. Use `apply_patch` for manual edits.
 5. Run focused verification. Default checks are `npm run lint` for TypeScript and `npm run build` for production bundling when UI/runtime behavior changed.
-6. Do not assume `npm test` exists; `package.json` currently has no test script.
+6. `npm test` exists and runs lint, unit, component, and Playwright E2E tests. Prefer narrower scripts first when only one layer changed.
 7. If graph freshness matters after edits, run `code-review-graph update --repo /Users/theorajan/local\ builds/airframe` or full `code-review-graph build --repo /Users/theorajan/local\ builds/airframe`.
+
+## Response Footer
+
+- End completed responses with a concise token-usage line when the runtime exposes exact counts.
+- If exact counts are unavailable, write `Token usage: unavailable in this runtime` rather than estimating.
 
 ## High-Risk Files
 
@@ -52,6 +57,9 @@ npm i
 npm run dev
 npm run lint
 npm run build
+npm run test:unit
+npm run test:components
+npm run test:e2e
 code-review-graph status
 code-review-graph build --repo /Users/theorajan/local\ builds/airframe
 ```
@@ -91,15 +99,14 @@ Fall back to Grep/Glob/Read **only** when the graph doesn't cover what you need.
 
 ### Workflow
 
-1. The graph auto-updates on file changes (via hooks).
+1. Check `code-review-graph status` first; rebuild/update only when freshness matters or after meaningful source edits.
 2. Use `detect_changes` for code review.
 3. Use `get_affected_flows` to understand impact.
 4. Use `query_graph` pattern="tests_for" to check coverage.
 
 ### Current Graph Notes
 
-- Full graph build completed on 2026-04-21.
-- Current CLI status after Firebase-only refactor: 132 files parsed, 471 indexed nodes; build output reported 566 total nodes, 2908 edges, 39 flows, 11 communities.
+- Current CLI status on 2026-04-28: 150 files, 538 nodes, 3572 edges; built on branch `main` at commit `8c9e05bb76d0`.
 - `get_architecture_overview` works through MCP.
 - Some graph hotspot tools may fail with a path-resolution error; fall back to overview/search and targeted file reads.
 - This folder is now a git repository, but `.code-review-graph/` is local-only and gitignored. Run graph update/build manually when needed.

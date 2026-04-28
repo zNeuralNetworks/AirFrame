@@ -11,6 +11,7 @@ Airframe is an interactive wireless-systems learning app for Arista-oriented SE/
 - React 19, TypeScript, Vite 8, Tailwind CSS 4.2.
 - Zustand 5 with persisted local progress.
 - Firebase Auth/Firestore for Google and email/password login, user progress, feedback, lesson/glossary overrides.
+- Tests: Vitest unit/component suites plus Playwright E2E.
 - Icons: `lucide-react`; charts: `recharts`; animation: `motion`.
 
 ## Main Paths
@@ -39,7 +40,8 @@ Airframe is an interactive wireless-systems learning app for Arista-oriented SE/
 - Dev server: `npm run dev` (serves on `http://localhost:3000`)
 - Build: `npm run build`
 - Type check: `npm run lint`
-- No test script is currently defined.
+- Full test suite: `npm test`
+- Focused tests: `npm run test:unit`, `npm run test:components`, `npm run test:e2e`
 
 ## Change Risk
 
@@ -56,4 +58,4 @@ High-blast-radius files: `src/state/userStore.ts`, `src/app/AcademyApp.tsx`, `sr
 
 ## Graph Note
 
-Project instructions require using code-review-graph MCP tools before grep/read exploration. `get_architecture_overview` works and reported high coupling between feature/simulation areas and app/layout/services. Some graph hotspot tools may currently fail with a path-resolution error.
+Project instructions require using code-review-graph MCP/CLI tools before broad grep/read exploration. Current CLI status on 2026-04-28: 150 files, 538 nodes, 3572 edges, built on branch `main` at commit `8c9e05bb76d0`. Some graph hotspot MCP tools may fail with a path-resolution error; use CLI status/build plus targeted reads as fallback.
