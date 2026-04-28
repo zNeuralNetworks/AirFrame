@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchData, onSearchResultClick }
       item.title.toLowerCase().includes(lowerQuery) || 
       item.content.toLowerCase().includes(lowerQuery) ||
       item.category.toLowerCase().includes(lowerQuery)
-    ).slice(0, 5).map(item => {
+    ).slice(0, 10).map(item => {
       const contentIndex = item.content.toLowerCase().indexOf(lowerQuery);
       let snippet = item.content.substring(0, 60) + '...';
       if (contentIndex > -1) {

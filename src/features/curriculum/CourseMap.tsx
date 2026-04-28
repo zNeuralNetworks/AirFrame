@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Lesson } from '../../types';
 import { 
   CheckCircle2, 
@@ -58,6 +58,13 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
   const [referenceMode, setReferenceMode] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'galaxy'>('list');
   const [selectedGalaxyModule, setSelectedGalaxyModule] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedGalaxyModule) return;
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedGalaxyModule(null); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [selectedGalaxyModule]);
 
   // Group lessons by Module (Category)
   const modules = useMemo(() => {
@@ -386,7 +393,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ lessons, onSelectLesson }) => {
                     </button>
                     
                     <div className="mt-10">
-                       <span className="text-xs font-bold text-brand-400 uppercase tracking-widest mb-3 block">Module Detail</span>
+                       <span className="text-xs font-bold text-white/40 uppercase tracking-widest mb-1 block">Galaxy View › Module</span>
                        <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">{selectedGalaxyModule}</h2>
                        
                        <div className="galaxy-lessons-list">

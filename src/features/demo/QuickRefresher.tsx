@@ -1,5 +1,5 @@
 
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Zap, GitCompare, ShieldCheck, Target, Key, Box, Network, ArrowRightLeft, Eye, EyeOff } from 'lucide-react';
 import { COMPARISON_DATA, WIFI7_TALKING_POINTS } from '../../content/comparisons';
 
@@ -11,6 +11,9 @@ const QuickRefresher: React.FC = () => {
   const [compareB, setCompareB] = useState('Wi-Fi 7 (802.11be)');
   const [studyMode, setStudyMode] = useState(false);
   const [revealedSpecs, setRevealedSpecs] = useState<Record<string, boolean>>({});
+
+  useEffect(() => { setRevealedSpecs({}); }, [compareA, compareB]);
+  useEffect(() => { if (!studyMode) setRevealedSpecs({}); }, [studyMode]);
 
   const toggleReveal = (key: string) => {
     setRevealedSpecs(prev => ({ ...prev, [key]: !prev[key] }));

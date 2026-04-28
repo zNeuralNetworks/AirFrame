@@ -262,7 +262,17 @@ const LessonView: React.FC<LessonViewProps> = ({ lessonId, onBack, onComplete })
                           if (lesson.quiz[currentQuestionIndex].correctIndex === selectedOption) setQuizScore(s => s + 1);
                       }}
                       onNextQuestion={handleNextQuestion}
-                      onFinalCompletion={(passed) => passed ? onComplete(lesson.id, quizScore) : window.location.reload()}
+                      onFinalCompletion={(passed) => {
+                          if (passed) {
+                              onComplete(lesson.id, quizScore);
+                          } else {
+                              setCurrentQuestionIndex(0);
+                              setSelectedOption(null);
+                              setIsAnswered(false);
+                              setQuizScore(0);
+                              setShowSummary(false);
+                          }
+                      }}
                   />
               )
           )}
